@@ -3,10 +3,23 @@
 # End:
 
 * Artifact                                                             :verb:
-template https://api.artifactsmmo.com/my/{{(verb-var character "ahungry")}}
+template https://api.artifactsmmo.com
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{my-artifact-token}}
 
-** Rest action
+** Get info
+*** Logs
+get /my/logs
+
+*** Stats
+get /characters/{{(verb-var character "ahungry")}}
+
+** Actions for Ahungry
+template /my/{{(verb-var character "ahungry")}}
+
+*** Rest action
 post /action/rest
+
+*** Fight action
+post /action/fight
