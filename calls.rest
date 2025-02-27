@@ -1,0 +1,14 @@
+:character = ahungry
+
+:headers = <<
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer :token
+#
+
+# :url = https://api.artifactsmmo.com/my/:character/action/move
+:url = https://api.artifactsmmo.com/my/:character/action/rest
+
+POST :url
+:headers
+#

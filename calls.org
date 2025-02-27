@@ -1,0 +1,12 @@
+# Local Variables:
+# eval: (verb-mode)
+# End:
+
+* Artifact                                                             :verb:
+template https://api.artifactsmmo.com/my/{{(verb-var character "ahungry")}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{my-artifact-token}}
+
+** Rest action
+post /action/rest
