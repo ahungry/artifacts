@@ -1,9 +1,11 @@
 DROP TABLE inventory;
 
 CREATE TABLE inventory (
-  slot int PRIMARY KEY ON CONFLICT REPLACE,
+  name text,
+  slot int,
   code text,
-  quantity int
+  quantity int,
+  UNIQUE (name, slot) ON CONFLICT REPLACE
 );
 
 .mode table

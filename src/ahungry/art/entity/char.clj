@@ -69,7 +69,10 @@
   (let [data (filter-columns char)]
     (j/insert! db :chars data)
     (j/delete! db :inventory [])
-    (j/insert-multi! db :inventory (:inventory char))
+    (j/insert-multi!
+     db
+     :inventory
+     (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char )))
     (progress data)
     data))
 
