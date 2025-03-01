@@ -1,6 +1,9 @@
 # Local Variables:
 # eval: (verb-mode)
+# eval: (load-file "~/dotfiles/flub/.emacs.d/private/my-vars.el.gpg")
 # End:
+
+# api ref: https://api.artifactsmmo.com/docs/#/operations/get_all_monsters_monsters_get
 
 * Artifact                                                             :verb:
 template https://api.artifactsmmo.com
@@ -11,6 +14,20 @@ Authorization: Bearer {{my-artifact-token}}
 ** Get info
 *** Logs
 get /my/logs
+
+*** Maps
+**** All maps
+get /maps?page=3
+
+**** Single map
+get /maps/0/1
+
+*** Maps
+**** All monsters
+get /monsters
+
+**** Single monsters
+get /monsters/chicken
 
 *** Stats
 get /characters/{{(verb-var character "ahungry")}}
