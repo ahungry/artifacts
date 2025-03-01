@@ -9,9 +9,6 @@
    [java-time.api :as jt]))
 
 (defonce last-char-name (atom nil))
-(defonce run-actions (atom nil))
-;; (defonce prefer-routine (atom :fighting))
-(defonce prefer-routine (atom :woodcutting))
 
 (defn epoch []
   (.getEpochSecond (jt/instant)))
@@ -128,52 +125,3 @@
 
 (defn can-act? [name]
   (> 0 (get-delay name)))
-
-;; Our get-hunting-grounds will recommend the highest difficulty area
-;; our character can take on - if it's not our current time, time to move.
-(defn time-to-move-on-hunting? [name]
-  (let [best-area (get-hunting-grounds "ahungry")
-        char (get-char name)]
-    (or (not= (:x best-area) (:x char))
-        (not= (:y best-area) (:y char)))))
-
-(defn time-to-move-on-woodcutting? [name]
-  (let [best-area (get-woodcutting-grounds "ahungry")
-        char (get-char name)]
-    (or (not= (:x best-area) (:x char))
-        (not= (:y best-area) (:y char)))))
-
-(defn do-fighting-routine! [name]
-  (cond
-    ;; Anytime we aren't full health, resting takes precedence.
-    (not (full-health? name)) (do-rest! name)
-    ;; See if we should go fight some tougher things
-    (time-to-move-on-hunting? name) (do-move-to-hunting-grounds name)
-    ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (do-fight! name)))
-
-(defn do-woodcutting-routine! [name]
-  (cond
-    ;; Anytime we aren't full health, resting takes precedence.
-    (not (full-health? name)) (do-rest! name)
-    ;; See if we should go fight some tougher things
-    (time-to-move-on-woodcutting? name) (do-move-to-woodcutting-grounds name)
-    ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (do-gather! name)))
-
-(defn do-actions! [name]
-  (log/info "Starting action cycle for " name "with routine" @prefer-routine)
-  (reset! run-actions true)
-  (future
-    (while @run-actions
-      (Thread/sleep 1000)
-      (when (can-act? name)
-        (cond
-          (= :fighting @prefer-routine) (do-fighting-routine! name)
-          (= :woodcutting @prefer-routine) (do-woodcutting-routine! name)
-          true (log/error "Nothing to do - the prefer-routine is wrong..."))
-        (log/info "Next action available in: " (get-delay name))))
-    (log/info "Ending action cycle for " name)))
-
-(defn stop-actions []
-  (reset! run-actions nil))

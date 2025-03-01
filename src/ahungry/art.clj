@@ -3,8 +3,7 @@
    [clojure.tools.logging :as log]
    [clojure.pprint]
    [clojure.string]
-   [ahungry.art.entity.monster :as mon]
-   [ahungry.art.entity.map :as emap]
+   [ahungry.art.routine :as r]
    [ahungry.art.entity.char :as c])
   (:gen-class))
 
@@ -14,6 +13,6 @@
   (let [char (c/fetch-char "ahungry")]
        (c/import-char! char)
        (c/progress char))
-  (reset! c/prefer-routine :fighting)
+  (reset! r/prefer-routine :fighting)
   ;; (c/reset! prefer-routine :woodcutting)
-  (future (c/do-actions! "ahungry")))
+  (future (r/do-routine! "ahungry")))
