@@ -103,7 +103,7 @@ post /action/crafting
 *** Equip the upgraded weapon
 post /action/equip
 
-{"code": "copper_helmet", "slot": "head"}
+{"code": "copper_helmet", "slot": "helmet"}
 
 *** Do mining
 post /action/gathering

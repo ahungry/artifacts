@@ -49,6 +49,8 @@
     ;; TODO: Need to confirm this actually worked before giving up...
     (swap! pending-equippables conj {name nil})))
 
+(def has-craftable-upgrades? craft/has-craftable-upgrades?)
+
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
