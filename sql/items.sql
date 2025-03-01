@@ -7,7 +7,8 @@ CREATE TABLE items (
   type text,
   subtype text,
   description text,
-  tradeable bool
+  tradeable bool,
+  quality float
 );
 
 .mode table
@@ -15,3 +16,5 @@ CREATE TABLE items (
 pragma table_info(items);
 
 select code, type, subtype from items limit 10;
+
+select * from items where type = 'boots';

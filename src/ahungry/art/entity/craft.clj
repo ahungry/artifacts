@@ -2,6 +2,7 @@
   (:require
    [ahungry.art.repo :refer [db sdk]]
    [ahungry.art.entity.char :as c]
+   [ahungry.art.entity.item :as i]
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
    [clojure.java.io]
@@ -9,10 +10,12 @@
    [clj-http.client :as client]))
 
 (defn get-craft [code]
-  (j/query db ["select * from crafts where code=?" code]))
+  (j/query db ["select c.*, i.type, i.subtype from crafts c
+left join items i on c.code = i.code where c.code=?" code]))
 
-(defn get-craft-codes []
-  (j/query db ["select distinct(code) from crafts where 1=?" 1] {:row-fn :code}))
+(defn get-craft-codes [type]
+  (j/query db ["select distinct(c.code) from crafts c
+left join items i on c.code = i.code where i.type = ?" type] {:row-fn :code}))
 
 (defn has-material-in-inventory? [name {:keys [material_code material_quantity]}]
   (= 1 (count (j/query db ["select * from inventory where name=? and code=? and quantity>=?"
@@ -36,8 +39,8 @@
                                        (:level reagent))) craft) count)]
     (= skill-count reagent-count)))
 
-(defn get-all-craftables [name]
-  (->> (get-craft-codes)
+(defn get-all-craftables [name type]
+  (->> (get-craft-codes type)
        (map get-craft)
        (filter (partial has-skill? name))
        (filter (partial has-materials? name))))

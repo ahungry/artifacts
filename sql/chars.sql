@@ -43,6 +43,22 @@ CREATE TABLE chars (
   cooking_level int,
   cooking_xp int,
   cooking_max_xp int,
+  weapon_slot text,
+  rune_slot text,
+  shield_slot text,
+  helmet_slot text,
+  body_armor_slot text,
+  leg_armor_slot text,
+  boots_slot text,
+  ring1_slot text,
+  ring2_slot text,
+  amulet_slot text,
+  artifact1_slot text,
+  artifact2_slot text,
+  artifact3_slot text,
+  utility1_slot text,
+  utility2_slot text,
+  bag_slot text,
   gold int
 );
 

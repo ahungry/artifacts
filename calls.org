@@ -34,7 +34,22 @@ get /monsters/chicken
 get /items
 
 **** Single item
-get /items/copper
+get /items/copper_dagger
+
+**** Single item
+get /items/wooden_staff
+
+**** Single item
+get /items/copper_boots
+
+**** Single item
+get /items/copper_boots
+
+**** Single item
+get /items/iron_boots
+
+**** Single item
+get /items/leather_boots
 
 *** Resources
 **** All resources
