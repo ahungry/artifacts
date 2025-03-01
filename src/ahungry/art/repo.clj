@@ -34,9 +34,11 @@
     (try+
      (-> (client/request req) :body)
      (catch [:status 499] {:keys [body]}
-       (log/warn "Need to wait before calling: " body))
+       (log/warn "Need to wait before calling: " body) body)
      (catch [:status 598] {:keys [body]}
-       (log/warn "Bad status code: " body)))))
+       (log/warn "Bad status code: " body) body)
+     (catch Object {:keys [body]}
+       (log/warn "Uncaught error: " body) body))))
 
 (defn sdk-for [char-name]
   (fn [action & [body]]
