@@ -15,4 +15,4 @@ VALUES ('chicken', 1, 60, 0, 0, 4, 0);
 
 .mode table
 
-select * from monsters;
+select * from monsters where level < 3;

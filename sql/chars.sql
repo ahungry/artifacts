@@ -12,7 +12,10 @@ CREATE TABLE chars (
   x int,
   y int,
   cooldown_expiration text,
-  cooldown int
+  cooldown int,
+  xp int,
+  max_xp int,
+  gold int
 );
 
 pragma table_info(chars);
