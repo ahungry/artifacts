@@ -1,4 +1,4 @@
-(ns ahungry.art.routine.woodcutting
+(ns ahungry.art.routine.mining
   (:require
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
@@ -11,8 +11,8 @@
 
 (defn get-pref-area [name]
   (let [char (char/get-char name)]
-    (-> (emap/get-woodcutting-grounds
-         {:woodcutting_level (:woodcutting_level char)})
+    (-> (emap/get-mining-grounds
+         {:mining_level (:mining_level char)})
         first)))
 
 (defn do-move-to-pref-area! [name]

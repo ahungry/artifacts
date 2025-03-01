@@ -7,6 +7,7 @@
    [java-time.api :as jt]
    [ahungry.art.entity.char :as char]
    [ahungry.art.routine.fight :as fight]
+   [ahungry.art.routine.mining :as mining]
    [ahungry.art.routine.woodcutting :as woodcutting]
    [ahungry.art.entity.map :as emap]))
 
@@ -22,6 +23,7 @@
       (when (char/can-act? name)
         (cond
           (= :fighting @prefer-routine) (fight/routine! name)
+          (= :mining @prefer-routine) (mining/routine! name)
           (= :woodcutting @prefer-routine) (woodcutting/routine! name)
           true (log/error "Nothing to do - the prefer-routine is wrong..."))
         (log/info "Next action available in: " (char/get-delay name))))
