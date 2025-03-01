@@ -34,7 +34,7 @@ get /monsters/chicken
 get /items
 
 **** Single item
-get /items/copper_dagger
+get /items/copper
 
 *** Resources
 **** All resources
@@ -60,17 +60,32 @@ post /action/unequip
 
 {"slot": "weapon"}
 
-*** Move to crafting area
+*** Move to weapon crafting area
 post /action/move
 
 {"x": 2, "y": 1}
 
+*** Move to gear crafting area
+post /action/move
+
+{"x": 3, "y": 1}
+
+*** Move to forge crafting area
+post /action/move
+
+{"x": 1, "y": 5}
+
+*** Craft some bars
+post /action/crafting
+
+{"code": "copper"}
+
 *** Craft the upgrade
 post /action/crafting
 
-{"code": "wooden_staff"}
+{"code": "copper_helmet"}
 
 *** Equip the upgraded weapon
 post /action/equip
 
-{"code": "wooden_staff", "slot": "weapon"}
+{"code": "copper_helmet", "slot": "head"}

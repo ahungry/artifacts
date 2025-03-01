@@ -20,3 +20,5 @@ select * from maps;
 select distinct(content_type) from maps;
 
 select * from maps where content_type = 'resource';
+
+select * from maps where content_type = 'workshop';
