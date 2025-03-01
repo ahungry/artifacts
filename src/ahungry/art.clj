@@ -3,9 +3,11 @@
    [clojure.tools.logging :as log]
    [clojure.pprint]
    [clojure.string]
-   [ahungry.art.entity.monster :as m])
+   [ahungry.art.entity.monster :as mon]
+   [ahungry.art.entity.map :as emap]
+   [ahungry.art.entity.char :as c])
   (:gen-class))
 
 (defn -main [& args]
-  (log/info (m/get-monsters))
-  (log/info "Hello world"))
+  (log/info "Starting up...")
+  (future (c/do-actions! "ahungry")))

@@ -7,6 +7,9 @@
    [clojure.string]
    [clj-http.client :as client]))
 
+(defn get-map [x y]
+  (j/query db ["select * from maps where x=? and y=?" x y]))
+
 (defn get-maps []
   (j/query db ["select * from maps where 1=?" 1]))
 
@@ -24,6 +27,7 @@ select * from maps
 left join monsters m ON maps.content_code = m.code
 where content_type = 'monster'
 and (m.hp / ?) < (? / (m.attack_fire + m.attack_earth + m.attack_water + m.attack_air))
+order by level desc
 "
     attack hp]))
 

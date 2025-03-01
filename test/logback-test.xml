@@ -1,6 +1,8 @@
 <!-- This is the config file that ends up getting used when "test" is
-     on paths -->
+     on paths (look in .dir-locals.el and see test is part of it for
+     REPL) -->
 <configuration debug="false">
+  <!-- This is the one that's hit in the REPL, change levels here -->
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>
@@ -8,6 +10,11 @@
         %-5level %logger{36} - %msg%n
       </pattern>
     </encoder>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+      <onMatch>DENY</onMatch>
+      <onMismatch>NEUTRAL</onMismatch>
+    </filter>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <level>TRACE</level>
       <onMatch>DENY</onMatch>

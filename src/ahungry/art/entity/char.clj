@@ -42,10 +42,11 @@
    :cooldown_expiration (:cooldown_expiration m)
    :cooldown (:cooldown m)})
 
-(defn progress [{:keys [name level xp max_xp hp max_hp gold]}]
+(defn progress [{:keys [x y name level xp max_xp hp max_hp gold]}]
   (log/info
    "Progress" name "lvl:" level ", xp:" xp "/" max_xp ", gold: " gold
-   ", hp:" hp "/" max_hp))
+   ", hp:" hp "/" max_hp)
+  (log/info (emap/get-map x y)))
 
 (defn import-char! [char]
   (let [data (filter-columns char)]
@@ -89,7 +90,7 @@
                      (:attack_earth char)
                      (:attack_fire char)
                      (:attack_water char))})
-        last)))
+        first)))
 
 (defn do-move-to-hunting-grounds [& [name]]
   (let [area (get-hunting-grounds (get-name name))]
