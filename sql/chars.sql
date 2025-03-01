@@ -31,6 +31,18 @@ CREATE TABLE chars (
   alchemy_max_xp int,
   inventory_max_items int,
   inventory_count_items int,
+  weaponcrafting_level int,
+  weaponcrafting_xp int,
+  weaponcrafting_max_xp int,
+  gearcrafting_level int,
+  gearcrafting_xp int,
+  gearcrafting_max_xp int,
+  jewelrycrafting_level int,
+  jewelrycrafting_xp int,
+  jewelrycrafting_max_xp int,
+  cooking_level int,
+  cooking_xp int,
+  cooking_max_xp int,
   gold int
 );
 

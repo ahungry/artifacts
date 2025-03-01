@@ -1,7 +1,7 @@
 (ns ahungry.art.entity.craft
   (:require
    [ahungry.art.repo :refer [db sdk]]
-   [ahungry.art.entity.craft :as craft]
+   [ahungry.art.entity.char :as c]
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
    [clojure.java.io]
@@ -11,8 +11,36 @@
 (defn get-craft [code]
   (j/query db ["select * from crafts where code=?" code]))
 
-(defn get-crafts []
-  (j/query db ["select * from crafts where 1=?" 1]))
+(defn get-craft-codes []
+  (j/query db ["select distinct(code) from crafts where 1=?" 1] {:row-fn :code}))
+
+(defn has-material-in-inventory? [name {:keys [material_code material_quantity]}]
+  (= 1 (count (j/query db ["select * from inventory where name=? and code=? and quantity>=?"
+                           name material_code material_quantity]))))
+
+(defn has-materials? [name craft]
+  (let [reagent-count (count craft)
+        has-it? (partial has-material-in-inventory? name)
+        inventory-matches (filter has-it? craft)
+        inventory-count (count inventory-matches)]
+    (= inventory-count reagent-count)))
+
+(defn get-skill-level [reagent]
+  (keyword (str (:skill reagent) "_level")))
+
+(defn has-skill? [name craft]
+  (let [reagent-count (count craft)
+        char (c/get-char name)
+        skill-count (->> (filter (fn [reagent]
+                                   (>= ((get-skill-level reagent) char)
+                                       (:level reagent))) craft) count)]
+    (= skill-count reagent-count)))
+
+(defn get-all-craftables [name]
+  (->> (get-craft-codes)
+       (map get-craft)
+       (filter (partial has-skill? name))
+       (filter (partial has-materials? name))))
 
 (defn insert-craft-rows! [m]
   (when (:craft m)

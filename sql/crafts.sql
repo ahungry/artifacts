@@ -25,6 +25,8 @@ select count(distinct(code)) FROM crafts order by code;
 
 select * FROM crafts where material_code = 'copper' order by level, code;
 
-select * FROM inventory;
+select * FROM crafts
+where code = 'copper_armor'
+;
 
-select * FROM chars;
+select * from inventory;
