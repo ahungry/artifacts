@@ -68,6 +68,8 @@
 (defn import-char! [char]
   (let [data (filter-columns char)]
     (j/insert! db :chars data)
+    (j/delete! db :inventory [])
+    (j/insert-multi! db :inventory (:inventory char))
     (progress data)
     data))
 
@@ -100,8 +102,8 @@
 (defn do-move! [{:keys [x y]} & [name]]
   (do-action! :move (get-name name) {:x x :y y}))
 
-(defn do-craft! [{:keys [code]} & [name]]
-  (do-action! :move (get-name name) {:code code}))
+(defn do-crafting! [{:keys [code]} & [name]]
+  (do-action! :crafting (get-name name) {:code code}))
 
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]

@@ -32,4 +32,4 @@
     ;; See if we should go fight some tougher things
     (time-to-move-on? name) (do-move-to-pref-area! name)
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (char/do-craft! {:code "copper"} name)))
+    true (char/do-crafting! {:code "copper"} name)))

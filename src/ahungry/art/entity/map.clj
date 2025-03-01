@@ -79,7 +79,7 @@ and content_code = ?
    })
 
 (defn inspect [x]
-  (log/debug "Found a set of data with " (count x) " elements.")
+  (log/info "Found a set of data with " (count x) " elements.")
   x)
 
 (defn import-maps! []
@@ -88,7 +88,7 @@ and content_code = ?
     ;; (j/delete! db :maps [])
     (for [page (map inc (range pages))]
              (let [res (sdk :get (str "/maps?page=" page))]
-               (->> res :body :data
+               (->> res :data
                     inspect
                     (map filter-columns)
                     (j/insert-multi! db :maps))
