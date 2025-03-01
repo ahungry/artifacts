@@ -15,6 +15,18 @@ CREATE TABLE chars (
   cooldown int,
   xp int,
   max_xp int,
+  woodcutting_level int,
+  woodcutting_xp int,
+  woodcutting_max_xp int,
+  fishing_level int,
+  fishing_xp int,
+  fishing_max_xp int,
+  mining_level int,
+  mining_xp int,
+  mining_max_xp int,
+  alchemy_level int,
+  alchemy_xp int,
+  alchemy_max_xp int,
   gold int
 );
 

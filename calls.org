@@ -22,12 +22,26 @@ get /maps?page=1
 **** Single map
 get /maps/0/1
 
-*** Maps
+*** Monsters
 **** All monsters
 get /monsters
 
 **** Single monsters
 get /monsters/chicken
+
+*** Items
+**** All item
+get /items
+
+**** Single item
+get /items/copper_dagger
+
+*** Resources
+**** All resources
+get /resources
+
+**** Single resource
+get /resources/ash_tree
 
 *** Stats
 get /characters/{{(verb-var character "ahungry")}}
@@ -40,3 +54,23 @@ post /action/rest
 
 *** Fight action
 post /action/fight
+
+*** Unequip current weapon
+post /action/unequip
+
+{"slot": "weapon"}
+
+*** Move to crafting area
+post /action/move
+
+{"x": 2, "y": 1}
+
+*** Craft the upgrade
+post /action/crafting
+
+{"code": "wooden_staff"}
+
+*** Equip the upgraded weapon
+post /action/equip
+
+{"code": "wooden_staff", "slot": "weapon"}

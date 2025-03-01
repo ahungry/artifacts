@@ -16,3 +16,7 @@ VALUES ('City', 'forest_chicken1', 0, 1, 'monster', 'chicken');
 .mode table
 
 select * from maps;
+
+select distinct(content_type) from maps;
+
+select * from maps where content_type = 'resource';

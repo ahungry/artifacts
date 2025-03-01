@@ -31,6 +31,19 @@ order by level desc
 "
     attack hp]))
 
+(defn get-woodcutting-grounds [{:keys [woodcutting_level] :as char}]
+  (j/query
+   db
+   ["
+select * from maps
+left join resources r ON maps.content_code = r.code
+where content_type = 'resource'
+and r.level <= ?
+and r.skill = 'woodcutting'
+order by level desc
+"
+    woodcutting_level]))
+
 (defn filter-columns [{:keys [name skin x y] :as m}]
   {:name name
    :skin skin
