@@ -88,6 +88,9 @@ left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
          (filter #(> (:quality %) 0))
          (filter (partial is-better-than-equipped? char)))))
 
+(defn has-craftable-upgrades? [name]
+  (> (count (get-craftable-upgrades name)) 0))
+
 (defn insert-craft-rows! [m]
   (when (:craft m)
     (let [code (:code m)

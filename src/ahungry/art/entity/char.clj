@@ -96,11 +96,12 @@
 (defn import-char! [char]
   (let [data (filter-columns char)]
     (j/insert! db :chars data)
-    (j/delete! db :inventory [])
-    (j/insert-multi!
-     db
-     :inventory
-     (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char )))
+    (when (> (count (:inventory char)) 0)
+      (j/delete! db :inventory [])
+      (j/insert-multi!
+       db
+       :inventory
+       (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char ))))
     (progress data)
     data))
 
@@ -132,6 +133,12 @@
 
 (defn do-move! [{:keys [x y]} & [name]]
   (do-action! :move (get-name name) {:x x :y y}))
+
+(defn do-unequip! [{:keys [code slot]} & [name]]
+  (do-action! :equip (get-name name) {:slot slot}))
+
+(defn do-equip! [{:keys [code slot]} & [name]]
+  (do-action! :equip (get-name name) {:code code :slot slot}))
 
 (defn do-crafting! [{:keys [code]} & [name]]
   (do-action! :crafting (get-name name) {:code code}))
