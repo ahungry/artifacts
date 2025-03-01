@@ -1,7 +1,7 @@
 DROP TABLE monsters;
 
 CREATE TABLE monsters (
-  code text primary key,
+  code text primary key ON CONFLICT REPLACE,
   level int,
   hp int,
   attack_fire int,

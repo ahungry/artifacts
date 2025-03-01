@@ -17,7 +17,7 @@ get /my/logs
 
 *** Maps
 **** All maps
-get /maps?page=3
+get /maps?page=1
 
 **** Single map
 get /maps/0/1
