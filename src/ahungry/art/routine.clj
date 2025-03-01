@@ -9,6 +9,7 @@
    [ahungry.art.routine.fight :as fight]
    [ahungry.art.routine.mining :as mining]
    [ahungry.art.routine.woodcutting :as woodcutting]
+   [ahungry.art.routine.crafting :as crafting]
    [ahungry.art.entity.map :as emap]))
 
 (defonce run-routine (atom nil))
@@ -22,6 +23,8 @@
       (Thread/sleep 1000)
       (when (char/can-act? name)
         (cond
+          ;; If encumbered, we can't get more items, so go craft or bank?
+          (char/is-encumbered? name) (crafting/routine! name)
           (= :fighting @prefer-routine) (fight/routine! name)
           (= :mining @prefer-routine) (mining/routine! name)
           (= :woodcutting @prefer-routine) (woodcutting/routine! name)

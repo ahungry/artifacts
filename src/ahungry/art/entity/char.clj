@@ -23,6 +23,9 @@
     (throw (Exception. "Need to know the character name!")))
   (or s @last-char-name))
 
+(defn get-count-items [m]
+  (apply + (map :quantity m)))
+
 ;; Could use select-keys here but this is a nice visual
 (defn filter-columns [{:keys [name level max_hp hp x y xp max_xp gold] :as m}]
   {:name name
@@ -50,6 +53,8 @@
    :mining_level (:mining_level m)
    :mining_xp (:mining_xp m)
    :mining_max_xp (:mining_max_xp m)
+   :inventory_max_items (:inventory_max_items m)
+   :inventory_count_items (get-count-items (:inventory m))
    :cooldown_expiration (:cooldown_expiration m)
    :cooldown (:cooldown m)})
 
@@ -92,8 +97,11 @@
 (def do-fight! (partial do-action! :fight))
 (def do-gather! (partial do-action! :gathering))
 
-(defn do-move [{:keys [x y]} & [name]]
-  ((sdk-for (get-name name)) :move {:x x :y y}))
+(defn do-move! [{:keys [x y]} & [name]]
+  (do-action! :move (get-name name) {:x x :y y}))
+
+(defn do-craft! [{:keys [code]} & [name]]
+  (do-action! :move (get-name name) {:code code}))
 
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]
@@ -111,17 +119,14 @@
          {:woodcutting_level (:woodcutting_level char)})
         first)))
 
-(defn do-move-to-hunting-grounds [& [name]]
-  (let [area (get-hunting-grounds (get-name name))]
-    (do-move area (get-name name))))
-
-(defn do-move-to-woodcutting-grounds [& [name]]
-  (let [area (get-woodcutting-grounds (get-name name))]
-    (do-move area (get-name name))))
-
 (defn full-health? [name]
   (let [char (get-hp name)]
     (= (:hp char) (:max_hp char))))
 
 (defn can-act? [name]
   (> 0 (get-delay name)))
+
+(defn is-encumbered? [name]
+  (let [char (get-char name)]
+    (>= (:inventory_count_items char)
+        (:inventory_max_items char))))

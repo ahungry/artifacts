@@ -1,4 +1,4 @@
-(ns ahungry.art.routine.fight
+(ns ahungry.art.routine.crafting
   (:require
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
@@ -9,14 +9,10 @@
    [ahungry.art.entity.map :as emap]
    [ahungry.art.entity.char :as char]))
 
+;; TODO: Make this dynamic, as well as the craft target...
 (defn get-pref-area [name]
   (let [char (char/get-char name)]
-    (-> (emap/get-hunting-grounds
-         {:hp (:max_hp char)
-          :attack (+ (:attack_air char)
-                     (:attack_earth char)
-                     (:attack_fire char)
-                     (:attack_water char))})
+    (-> (emap/get-crafting-grounds "mining")
         first)))
 
 (defn do-move-to-pref-area! [name]
@@ -36,4 +32,4 @@
     ;; See if we should go fight some tougher things
     (time-to-move-on? name) (do-move-to-pref-area! name)
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (char/do-fight! name)))
+    true (char/do-craft! {:code "copper"} name)))

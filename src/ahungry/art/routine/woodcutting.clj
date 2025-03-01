@@ -17,10 +17,10 @@
 
 (defn do-move-to-pref-area! [name]
   (let [area (get-pref-area name)]
-    (char/do-move area name)))
+    (char/do-move! area name)))
 
 (defn time-to-move-on? [name]
-  (let [pref-area (get-pref-area "ahungry")
+  (let [pref-area (get-pref-area name)
         char (char/get-char name)]
     (or (not= (:x pref-area) (:x char))
         (not= (:y pref-area) (:y char)))))

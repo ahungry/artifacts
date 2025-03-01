@@ -58,6 +58,17 @@ order by level desc
 "
     mining_level]))
 
+(defn get-crafting-grounds [type]
+  (prn char)
+  (j/query
+   db
+   ["
+select * from maps
+where content_type = 'workshop'
+and content_code = ?
+"
+    type]))
+
 (defn filter-columns [{:keys [name skin x y] :as m}]
   {:name name
    :skin skin

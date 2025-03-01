@@ -89,3 +89,6 @@ post /action/crafting
 post /action/equip
 
 {"code": "copper_helmet", "slot": "head"}
+
+*** Do mining
+post /action/gathering

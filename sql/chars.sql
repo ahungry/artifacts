@@ -1,5 +1,7 @@
 DROP TABLE chars;
 
+delete from chars where 1=1;
+
 CREATE TABLE chars (
   name text PRIMARY KEY ON CONFLICT REPLACE,
   level int,
@@ -27,6 +29,8 @@ CREATE TABLE chars (
   alchemy_level int,
   alchemy_xp int,
   alchemy_max_xp int,
+  inventory_max_items int,
+  inventory_count_items int,
   gold int
 );
 
