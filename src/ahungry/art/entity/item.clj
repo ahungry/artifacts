@@ -39,6 +39,10 @@
 (defn get-quality [m]
   (cond
     (= "weapon" (:type m)) (get-weapon-quality (:effects m))
+
+    (.contains ["boots" "helmet" "shield" "leg_armor" "body_armor"] (:type m))
+    (get-armor-quality (:effects m))
+
     true 0))
 
 (defn filter-columns [m]
@@ -59,7 +63,7 @@
 (defn import-items! []
   (let [pages (-> (sdk :get "/items") :pages)]
     (log/info "About to fetch " pages "pages of item data!")
-    ;; (j/delete! db :items [])
+    (j/delete! db :items [])
     (for [page (map inc (range pages))]
              (let [res (sdk :get (str "/items?page=" page))]
                (->> res :data

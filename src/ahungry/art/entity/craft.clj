@@ -10,12 +10,12 @@
    [clj-http.client :as client]))
 
 (defn get-craft [code]
-  (j/query db ["select c.*, i.type, i.subtype from crafts c
+  (j/query db ["select c.*, i.type, i.subtype, i.quality from crafts c
 left join items i on c.code = i.code where c.code=?" code]))
 
-(defn get-craft-codes [type]
+(defn get-craft-codes []
   (j/query db ["select distinct(c.code) from crafts c
-left join items i on c.code = i.code where i.type = ?" type] {:row-fn :code}))
+left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
 
 (defn has-material-in-inventory? [name {:keys [material_code material_quantity]}]
   (= 1 (count (j/query db ["select * from inventory where name=? and code=? and quantity>=?"
@@ -39,11 +39,54 @@ left join items i on c.code = i.code where i.type = ?" type] {:row-fn :code}))
                                        (:level reagent))) craft) count)]
     (= skill-count reagent-count)))
 
-(defn get-all-craftables [name type]
-  (->> (get-craft-codes type)
+(defn get-all-craftables [name]
+  (->> (get-craft-codes)
        (map get-craft)
        (filter (partial has-skill? name))
-       (filter (partial has-materials? name))))
+       (filter (partial has-materials? name))
+       (map first)
+       flatten))
+
+;; +------------+
+;; |    type    |
+;; +------------+
+;; | amulet     |
+;; | artifact   |
+;; | bag        |
+;; | body_armor |
+;; | boots      |
+;; | consumable |
+;; | currency   |
+;; | helmet     |
+;; | leg_armor  |
+;; | resource   |
+;; | ring       |
+;; | rune       |
+;; | shield     |
+;; | utility    |
+;; | weapon     |
+;; +------------+
+(defn is-better-than-equipped? [char item]
+  (let [equipped-item-lookup
+        (cond
+          (= "body_armor" (:type item)) :body_armor_slot
+          (= "leg_armor" (:type item)) :leg_armor_slot
+          (= "boots" (:type item)) :boots_slot
+          (= "helmet" (:type item)) :helmet_slot
+          (= "ring" (:type item)) :ring_slot
+          (= "shield" (:type item)) :shield_slot
+          (= "rune" (:type item)) :rune_slot
+          (= "weapon" (:type item)) :weapon_slot)
+        existing-item (first (i/get-item (equipped-item-lookup char)))]
+    (if existing-item
+      (> (:quality item) (:quality existing-item))
+      true)))
+
+(defn get-craftable-upgrades [name]
+  (let [char (c/get-char name)]
+    (->> (get-all-craftables name)
+         (filter #(> (:quality %) 0))
+         (filter (partial is-better-than-equipped? char)))))
 
 (defn insert-craft-rows! [m]
   (when (:craft m)

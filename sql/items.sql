@@ -17,4 +17,6 @@ pragma table_info(items);
 
 select code, type, subtype from items limit 10;
 
-select * from items where type = 'boots';
+select code, quality from items where quality > 0 order by quality desc;
+
+select distinct(type) from items order by type;
