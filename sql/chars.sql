@@ -69,4 +69,12 @@ pragma table_info(chars);
 
 .mode table
 
+.mode csv
+
 select * from chars;
+
+select name from chars;
+
+select count(*) from chars;
+
+select count(*) from chars where name <> 'ahungry';

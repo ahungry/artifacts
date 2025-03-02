@@ -23,7 +23,6 @@
 
 (defn do-move-to-pref-area! [name]
   (let [area (get-pref-area name)]
-    (log/info "moving to this area: " area)
     (char/do-move! area name)))
 
 (defn time-to-move-on? [name]

@@ -9,6 +9,7 @@
    [ahungry.art.routine.fight :as fight]
    [ahungry.art.routine.mining :as mining]
    [ahungry.art.routine.woodcutting :as woodcutting]
+   [ahungry.art.routine.recycling :as recycling]
    [ahungry.art.routine.crafting :as crafting]
    [ahungry.art.routine.crafting_upgrades :as crafting_upgrades]
    [ahungry.art.entity.map :as emap]))
@@ -16,9 +17,22 @@
 (defonce run-routine (atom nil))
 (defonce prefer-routine (atom :woodcutting))
 
+(defn get-random-routine-pref []
+  (let [opts [:fighting :mining :woodcutting]]
+    (nth opts (rand-int (count opts)))))
+
 (defn do-routine! [name]
   (log/info "Starting routine cycle for " name "preferring" @prefer-routine)
   (reset! run-routine true)
+
+  ;;  Rotate through routines every 5 minutes
+  (when (= :auto @prefer-routine)
+    (future
+      (while @run-routine
+        (reset! prefer-routine (get-random-routine-pref))
+        (log/info "New random routine preference chosen!" @prefer-routine)
+        (Thread/sleep (* 1000 60 5)))))
+
   (future
     (while @run-routine
       (Thread/sleep 1000)
@@ -32,7 +46,16 @@
           (crafting_upgrades/has-craftable-upgrades? name)
           (crafting_upgrades/routine! name)
 
+          ;; Maybe we can craft for some skill ups...
+          (crafting/has-craftable-items? name)
+          (crafting/routine! name)
+
+          ;; Maybe we can do some recycling?
+          (recycling/has-recyclables? name)
+          (recycling/routine! name)
+
           ;; Otherwise just default to our preferences
+          ;; TODO: Some auto input to cycle between these
           (= :fighting @prefer-routine) (fight/routine! name)
           (= :mining @prefer-routine) (mining/routine! name)
           (= :woodcutting @prefer-routine) (woodcutting/routine! name)

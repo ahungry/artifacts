@@ -1,4 +1,4 @@
-(ns ahungry.art.routine.crafting
+(ns ahungry.art.routine.recycling
   (:require
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
@@ -11,7 +11,7 @@
    [ahungry.art.entity.char :as char]))
 
 (defn get-item-next [name]
-  (first (craft/get-all-craftables name)))
+  (first (craft/get-recyclables name)))
 
 (defn get-pref-area [name]
   (let [char (char/get-char name)
@@ -30,17 +30,17 @@
          (or (not= (:x pref-area) (:x char))
              (not= (:y pref-area) (:y char))))))
 
-(def has-craftable-items? craft/has-craftable-items?)
+(def has-recyclables? craft/has-recyclables?)
 
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
     (not (char/full-health? name)) (char/do-rest! name)
 
-    (not (craft/has-craftable-items? name)) (log/info "Routine crafting, nothing to do!")
+    (not (craft/has-recyclables? name)) (log/info "Routine recycling, nothing to do!")
 
-    ;; See if we should go fight some tougher things
+    ;; See if we need to relocate
     (time-to-move-on? name) (do-move-to-pref-area! name)
 
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (char/do-crafting! {:code (:code (get-item-next name))} name)))
+    true (char/do-recycling! {:code (:code (get-item-next name))} name)))

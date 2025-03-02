@@ -88,8 +88,25 @@ left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
          (filter #(> (:quality %) 0))
          (filter (partial is-better-than-equipped? char)))))
 
+(defn get-recyclables [name]
+  (j/query db ["
+select i.*, c.skill from inventory i
+left join items it on i.code = it.code
+left join crafts c on i.code = c.code
+where i.name = ?
+and it.type IN ('weapon', 'boots', 'helmet', 'shield', 'leg_armor', 'body_armor')
+and i.code <> ''
+and i.code not in (select distinct(material_code) from crafts)"
+               name]))
+
+(defn has-craftable-items? [name]
+  (> (count (get-all-craftables name)) 0))
+
 (defn has-craftable-upgrades? [name]
   (> (count (get-craftable-upgrades name)) 0))
+
+(defn has-recyclables? [name]
+  (> (count (get-recyclables name)) 0))
 
 (defn insert-craft-rows! [m]
   (when (:craft m)

@@ -85,6 +85,11 @@ post /action/move
 
 {"x": 3, "y": 1}
 
+*** Do recycling
+post /action/recycling
+
+{"code": "copper_boots", "quantity": 1}
+
 *** Move to forge crafting area
 post /action/move
 
@@ -107,3 +112,13 @@ post /action/equip
 
 *** Do mining
 post /action/gathering
+
+*** Move to rune vendor
+post /action/move
+
+{"x": 6, "y": 13}
+
+*** Do selling (never works)
+post /action/npc/sell
+
+{"code": "copper_boots", "quantity": 1}

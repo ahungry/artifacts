@@ -123,7 +123,11 @@
 ;; Every action returns our character state, so we can follow the pattern here.
 (defn do-action! [action & [name body]]
   (let [res ((sdk-for (get-name name)) action body)]
-    (import-char! (get-in res [:data :character]))
+    (when (:error res)
+      (do
+        (log/error "The action request failed, re-importing character...")
+        (import-char! (fetch-char name)))
+      (import-char! (get-in res [:data :character])))
     res))
 
 ;; 0 arity actions
@@ -142,6 +146,9 @@
 
 (defn do-crafting! [{:keys [code]} & [name]]
   (do-action! :crafting (get-name name) {:code code}))
+
+(defn do-recycling! [{:keys [code]} & [name]]
+  (do-action! :recycling (get-name name) {:code code}))
 
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]
