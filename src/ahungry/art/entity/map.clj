@@ -67,6 +67,15 @@ and content_code = ?
 "
     type]))
 
+(defn get-banking-grounds []
+  (j/query
+   db
+   ["
+select * from maps
+where content_type = 'bank' "
+
+    ]))
+
 (defn filter-columns [{:keys [name skin x y] :as m}]
   {:name name
    :skin skin

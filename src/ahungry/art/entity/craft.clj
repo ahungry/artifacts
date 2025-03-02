@@ -39,6 +39,14 @@ left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
                                        (:level reagent))) craft) count)]
     (= skill-count reagent-count)))
 
+(defn get-all-usable-materials [name]
+  (->> (get-craft-codes)
+       (map get-craft)
+       (filter (partial has-skill? name))
+       flatten
+       (map #(:material_code %))
+       set))
+
 (defn get-all-craftables [name]
   (->> (get-craft-codes)
        (map get-craft)

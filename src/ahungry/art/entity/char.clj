@@ -86,10 +86,18 @@
    :cooldown_expiration (:cooldown_expiration m)
    :cooldown (:cooldown m)})
 
-(defn progress [{:keys [x y name level xp max_xp hp max_hp gold woodcutting_level woodcutting_xp woodcutting_max_xp]}]
+(defn progress [{:keys [x y name level xp max_xp hp max_hp gold
+                        woodcutting_level woodcutting_xp woodcutting_max_xp
+                        mining_level mining_xp mining_max_xp
+                        gearcrafting_level gearcrafting_xp gearcrafting_max_xp
+                        weaponcrafting_level weaponcrafting_xp weaponcrafting_max_xp
+                        ] :as m}]
   (log/info
    "Progress" name "lvl:" level ", xp:" xp "/" max_xp ", gold: " gold
    "wood lvl:" woodcutting_level ", xp: " woodcutting_xp "/" woodcutting_max_xp
+   "mining lvl:" mining_level ", xp: " mining_xp "/" mining_max_xp
+   "gearcrafting lvl:" gearcrafting_level ", xp: " gearcrafting_xp "/" gearcrafting_max_xp
+   "weaponcrafting lvl:" weaponcrafting_level ", xp: " weaponcrafting_xp "/" weaponcrafting_max_xp
    ", hp:" hp "/" max_hp)
   (log/info (emap/get-map x y)))
 
@@ -129,7 +137,8 @@
     (if (:error res)
       (do
         (log/error "Action failed - fix the code...")
-        (System/exit 1))
+        ;; (System/exit 1)
+        )
       (do
         (log/info "Action success for:" action)
         ;; (log/info "Next delay pre-update: " (get-delay name))
@@ -160,6 +169,9 @@
 
 (defn do-recycling! [{:keys [code]} & [name]]
   (do-action! :recycling (get-name name) {:code code}))
+
+(defn do-bank-deposit! [{:keys [code quantity]} & [name]]
+  (do-action! :bank-deposit (get-name name) {:code code :quantity quantity}))
 
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]

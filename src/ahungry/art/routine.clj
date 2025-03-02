@@ -9,6 +9,7 @@
    [ahungry.art.routine.fight :as fight]
    [ahungry.art.routine.mining :as mining]
    [ahungry.art.routine.woodcutting :as woodcutting]
+   [ahungry.art.routine.bank :as bank]
    [ahungry.art.routine.recycling :as recycling]
    [ahungry.art.routine.crafting :as crafting]
    [ahungry.art.routine.crafting_upgrades :as crafting_upgrades]
@@ -18,7 +19,7 @@
 (defonce prefer-routine (atom :woodcutting))
 
 (defn get-random-routine-pref []
-  (let [opts [:fighting :fighting :fighting :mining :woodcutting]]
+  (let [opts [:fighting :mining :woodcutting]]
     (nth opts (rand-int (count opts)))))
 
 (defn do-routine! [name]
@@ -40,7 +41,13 @@
         (cond
           ;; If encumbered, we can't get more items, so go craft or bank?
           ;; For now, this means convert copper ores into bars
-          (char/is-encumbered? name) (crafting/routine! name)
+          ;; (char/is-encumbered? name) (crafting/routine! name)
+          (bank/has-bankable-items? name)
+          (bank/routine! name)
+
+          ;; Maybe we can do some recycling?
+          (recycling/has-recyclables? name)
+          (recycling/routine! name)
 
           ;; If we see potential for an item upgrade, go make it and equip it
           (crafting_upgrades/has-craftable-upgrades? name)
@@ -49,10 +56,6 @@
           ;; Maybe we can craft for some skill ups...
           (crafting/has-craftable-items? name)
           (crafting/routine! name)
-
-          ;; Maybe we can do some recycling?
-          (recycling/has-recyclables? name)
-          (recycling/routine! name)
 
           ;; Otherwise just default to our preferences
           ;; TODO: Some auto input to cycle between these

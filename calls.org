@@ -22,6 +22,26 @@ get /maps?page=1
 **** Single map
 get /maps/0/1
 
+*** Bank
+**** Get bank items
+get /my/bank/items
+
+*** NPCs
+**** All NPCs
+get /npcs
+
+**** Single npc
+get /npcs/nomadic_merchant/items
+
+**** Single npc
+get /npcs/herbal_merchant/items
+
+**** Single npc
+get /npcs/timber_merchant/items
+
+**** Single npc
+get /npcs/fish_merchant/items
+
 *** Monsters
 **** All monsters
 get /monsters
@@ -122,3 +142,13 @@ post /action/move
 post /action/npc/sell
 
 {"code": "copper_boots", "quantity": 1}
+
+*** Move to city bank area
+post /action/move
+
+{"x": 4, "y": 1}
+
+*** Deposit an item
+post /action/bank/deposit
+
+{"code": "sap", "quantity": 17}

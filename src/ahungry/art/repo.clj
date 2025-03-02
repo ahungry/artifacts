@@ -28,7 +28,7 @@
                     :as :json
                     :coerce :always
                     } opts)]
-    ;; (log/debug "HTTP request: " req)
+    (log/debug "HTTP request: " req)
     ;; (log/debug "HTTP request to: " url)
     (try+
      (let [res (-> (client/request req) :body)]
@@ -41,7 +41,10 @@
      (catch Object {:keys [body]}
        (log/warn "Uncaught error: " body) body))))
 
+(defn kw->route [action]
+  (clojure.string/replace (name action) #"-" "/"))
+
 (defn sdk-for [char-name]
   (fn [action & [body]]
     (log/debug "Called with: " action)
-    (sdk :post (str "/my/" char-name "/action/" (name action)) {:body (generate-string body)})))
+    (sdk :post (str "/my/" char-name "/action/" (kw->route action)) {:body (generate-string body)})))

@@ -23,7 +23,7 @@ select * FROM crafts order by code;
 
 select count(distinct(code)) FROM crafts order by code;
 
-select * FROM crafts where material_code = 'copper' order by level, code;
+select * FROM crafts where material_code = 'green_slimeball' order by level, code;
 
 select * FROM crafts
 where code = 'copper_armor'
