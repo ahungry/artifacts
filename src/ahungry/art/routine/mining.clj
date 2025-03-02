@@ -12,7 +12,9 @@
 (defn get-pref-area [name]
   (let [char (char/get-char name)]
     (-> (emap/get-mining-grounds
-         {:mining_level (:mining_level char)})
+         {:mining_level (min (:mining_level char)
+                             (:gearcrafting_level char)
+                             (:weaponcrafting_level char))})
         first)))
 
 (defn do-move-to-pref-area! [name]
