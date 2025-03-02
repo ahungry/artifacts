@@ -10,8 +10,16 @@
    [ahungry.art.entity.craft :as craft]
    [ahungry.art.entity.char :as char]))
 
+(defn sort-by-lowest-skill [character craftables]
+  (sort-by (fn [x]
+             (let [x (keyword (str (:skill x) "_level"))]
+               (get character x)))
+           craftables))
+
 (defn get-item-next [name]
-  (first (craft/get-all-craftables name)))
+  (first (sort-by-lowest-skill
+          (char/get-char name)
+          (craft/get-all-craftables name))))
 
 (defn get-pref-area [name]
   (let [char (char/get-char name)
