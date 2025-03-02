@@ -157,12 +157,13 @@ where inv.name=? and inv.code <> ''" name]))
       when 'ring' then (select ii.quality from chars c
         left join items ii on ii.code=c.ring1_slot where c.name = inv.name)
 
-      else 0
-    end, 0)
+      else -1
+    end, -1)
 ) as existing_quality
 from inventory inv
 left join items i on inv.code=i.code
-where inv.name=? and inv.code <> '' and quality > 0
+where inv.name=? and inv.code <> ''
+and i.type in ('weapon', 'boots', 'body_armor', 'leg_armor', 'shield', 'helmet', 'ring')
 and quality > existing_quality
 order by type, quality desc" name]))
 
