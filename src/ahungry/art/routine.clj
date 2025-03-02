@@ -18,7 +18,7 @@
 (defonce prefer-routine (atom :woodcutting))
 
 (defn get-random-routine-pref []
-  (let [opts [:fighting :mining :woodcutting]]
+  (let [opts [:fighting :fighting :fighting :mining :woodcutting]]
     (nth opts (rand-int (count opts)))))
 
 (defn do-routine! [name]

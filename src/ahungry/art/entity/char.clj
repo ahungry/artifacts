@@ -132,12 +132,13 @@
         (System/exit 1))
       (do
         (log/info "Action success for:" action)
-        (log/info "Next delay pre-update: " (get-delay name))
-        (log/info "Cooldown data object:" (get-in res [:data :cooldown]))
-        (log/info "Cooldown data character:" (get-in res [:data :character :cooldown_expiration]))
+        ;; (log/info "Next delay pre-update: " (get-delay name))
+        ;; (log/info "Cooldown data object:" (get-in res [:data :cooldown]))
+        ;; (log/info "Cooldown data character:" (get-in res [:data :character :cooldown_expiration]))
         (import-char! (get-in res [:data :character]))
-        (log/info "Next delay in: " (get-delay name))
-        (log/info "Cooldown data character db:" (:cooldown_expiration (get-char name)))))
+        ;; (log/info "Next delay in: " (get-delay name))
+        ;; (log/info "Cooldown data character db:" (:cooldown_expiration (get-char name)))
+        ))
     res))
 
 ;; 0 arity actions

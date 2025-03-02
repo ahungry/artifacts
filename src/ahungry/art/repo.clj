@@ -19,7 +19,6 @@
   (-> (slurp ".token") (.trim)))
 
 (defn sdk [method path & [opts]]
-  (log/debug "Called the SDK...")
   (let [url (str "https://api.artifactsmmo.com" path)
         req (merge {:method method
                     :url url
