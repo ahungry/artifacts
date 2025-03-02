@@ -13,6 +13,7 @@
    [ahungry.art.routine.recycling :as recycling]
    [ahungry.art.routine.crafting :as crafting]
    [ahungry.art.routine.crafting_upgrades :as crafting_upgrades]
+   [ahungry.art.routine.inventory_upgrades :as inventory_upgrades]
    [ahungry.art.entity.map :as emap]))
 
 (defonce run-routine (atom nil))
@@ -46,9 +47,8 @@
                (bank/has-bankable-items? name))
           (bank/routine! name)
 
-          ;; Maybe we can do some recycling?
-          (recycling/has-recyclables? name)
-          (recycling/routine! name)
+          (inventory_upgrades/has-equippable-upgrades? name)
+          (inventory_upgrades/routine! name)
 
           ;; If we see potential for an item upgrade, go make it and equip it
           (crafting_upgrades/has-craftable-upgrades? name)
@@ -57,6 +57,10 @@
           ;; Maybe we can craft for some skill ups...
           (crafting/has-craftable-items? name)
           (crafting/routine! name)
+
+          ;; Maybe we can do some recycling?
+          (recycling/has-recyclables? name)
+          (recycling/routine! name)
 
           ;; Otherwise just default to our preferences
           ;; TODO: Some auto input to cycle between these

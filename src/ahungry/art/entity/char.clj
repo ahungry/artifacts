@@ -125,6 +125,47 @@
    (-> (j/query db ["select * from chars where name = ?" name]) first)
    (import-char! (fetch-char name))))
 
+(defn get-inventory [name]
+  (j/query db ["select i.* from inventory inv
+left join items i on inv.code=i.code
+where inv.name=? and inv.code <> ''" name]))
+
+(defn get-equippable-upgrades [name]
+  (j/query db ["select i.*,
+(
+  select
+    coalesce(case i.type
+
+      when 'weapon' then (select ii.quality from chars c
+        left join items ii on ii.code=c.weapon_slot where c.name = inv.name)
+
+      when 'boots' then (select ii.quality from chars c
+        left join items ii on ii.code=c.boots_slot where c.name = inv.name)
+
+      when 'body_armor' then (select ii.quality from chars c
+        left join items ii on ii.code=c.body_armor_slot where c.name = inv.name)
+
+      when 'leg_armor' then (select ii.quality from chars c
+        left join items ii on ii.code=c.leg_armor_slot where c.name = inv.name)
+
+      when 'shield' then (select ii.quality from chars c
+        left join items ii on ii.code=c.shield_slot where c.name = inv.name)
+
+      when 'helmet' then (select ii.quality from chars c
+        left join items ii on ii.code=c.helmet_slot where c.name = inv.name)
+
+      when 'ring' then (select ii.quality from chars c
+        left join items ii on ii.code=c.ring1_slot where c.name = inv.name)
+
+      else 0
+    end, 0)
+) as existing_quality
+from inventory inv
+left join items i on inv.code=i.code
+where inv.name=? and inv.code <> '' and quality > 0
+and quality > existing_quality
+order by type, quality desc" name]))
+
 (defn get-delay [name]
   (- (to-epoch (:cooldown_expiration (get-char name)))
      (epoch)))
@@ -160,7 +201,7 @@
   (do-action! :move (get-name name) {:x x :y y}))
 
 (defn do-unequip! [{:keys [code slot]} & [name]]
-  (do-action! :equip (get-name name) {:slot slot}))
+  (do-action! :unequip (get-name name) {:slot slot}))
 
 (defn do-equip! [{:keys [code slot]} & [name]]
   (do-action! :equip (get-name name) {:code code :slot slot}))

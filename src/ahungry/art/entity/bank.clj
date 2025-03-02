@@ -7,8 +7,8 @@
    [clojure.string]
    [clj-http.client :as client]))
 
-(defn get-bank [code]
-  (j/query db ["select * from bank where code=?" code]))
+(defn get-bank []
+  (j/query db ["select * from bank order by quantity desc"]))
 
 (defn get-bankable-items [name]
   (j/query db ["select * from inventory

@@ -11,6 +11,7 @@
    [ahungry.art.entity.craft :as craft]
    [ahungry.art.entity.char :as char]))
 
+;; TODO: Make sure none are recyclable either
 (defn get-bankable-items [name]
   (let [usable-materials (craft/get-all-usable-materials name)]
     (->> (bank/get-bankable-items name)
