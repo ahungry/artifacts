@@ -37,7 +37,7 @@
              (not= (:y pref-area) (:y char))))))
 
 (defn has-bankable-items? [name]
-  (>= (count (get-bankable-items name)) 0))
+  (> (count (get-bankable-items name)) 0))
 
 (defn routine! [name]
   (cond

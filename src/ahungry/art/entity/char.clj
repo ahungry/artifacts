@@ -196,6 +196,11 @@
 (defn can-act? [name]
   (> 0 (get-delay name)))
 
+(defn is-close-to-encumbered? [name]
+  (let [char (get-char name)]
+    (>= (/ (:inventory_count_items char)
+           (:inventory_max_items char)) 0.9)))
+
 (defn is-encumbered? [name]
   (let [char (get-char name)]
     (>= (:inventory_count_items char)

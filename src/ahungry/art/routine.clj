@@ -42,7 +42,8 @@
           ;; If encumbered, we can't get more items, so go craft or bank?
           ;; For now, this means convert copper ores into bars
           ;; (char/is-encumbered? name) (crafting/routine! name)
-          (bank/has-bankable-items? name)
+          (and (char/is-close-to-encumbered? name)
+               (bank/has-bankable-items? name))
           (bank/routine! name)
 
           ;; Maybe we can do some recycling?
