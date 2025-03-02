@@ -2,6 +2,7 @@
   (:require
    [ahungry.art.repo :refer [db sdk sdk-for]]
    [ahungry.art.entity.map :as emap]
+   [ahungry.art.entity.bank :as bank]
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
    [clojure.java.io]
@@ -171,7 +172,9 @@
   (do-action! :recycling (get-name name) {:code code}))
 
 (defn do-bank-deposit! [{:keys [code quantity]} & [name]]
-  (do-action! :bank-deposit (get-name name) {:code code :quantity quantity}))
+  (let [res (do-action! :bank-deposit (get-name name) {:code code :quantity quantity})]
+    (bank/import-bank!)
+    res))
 
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]
