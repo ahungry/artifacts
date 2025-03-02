@@ -95,15 +95,18 @@
 
 (defn import-char! [char]
   (let [data (filter-columns char)]
-    (j/insert! db :chars data)
-    (when (> (count (:inventory char)) 0)
-      (j/delete! db :inventory [])
-      (j/insert-multi!
-       db
-       :inventory
-       (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char ))))
-    (progress data)
-    data))
+    (if (> (count (:name data)) 0)
+      (do
+        (j/insert! db :chars data)
+        (when (> (count (:inventory char)) 0)
+          (j/delete! db :inventory [])
+          (j/insert-multi!
+           db
+           :inventory
+           (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char ))))
+        (progress data)
+        data)
+      (log/error "Somehow an empty character import occurred..."))))
 
 (defn fetch-char [name]
   (-> (sdk :get (str "/characters/" name)) :data))
@@ -123,11 +126,18 @@
 ;; Every action returns our character state, so we can follow the pattern here.
 (defn do-action! [action & [name body]]
   (let [res ((sdk-for (get-name name)) action body)]
-    (when (:error res)
+    (if (:error res)
       (do
-        (log/error "The action request failed, re-importing character...")
-        (import-char! (fetch-char name)))
-      (import-char! (get-in res [:data :character])))
+        (log/error "Action failed - fix the code...")
+        (System/exit 1))
+      (do
+        (log/info "Action success for:" action)
+        (log/info "Next delay pre-update: " (get-delay name))
+        (log/info "Cooldown data object:" (get-in res [:data :cooldown]))
+        (log/info "Cooldown data character:" (get-in res [:data :character :cooldown_expiration]))
+        (import-char! (get-in res [:data :character]))
+        (log/info "Next delay in: " (get-delay name))
+        (log/info "Cooldown data character db:" (:cooldown_expiration (get-char name)))))
     res))
 
 ;; 0 arity actions

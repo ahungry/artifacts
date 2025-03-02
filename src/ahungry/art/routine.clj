@@ -31,7 +31,7 @@
       (while @run-routine
         (reset! prefer-routine (get-random-routine-pref))
         (log/info "New random routine preference chosen!" @prefer-routine)
-        (Thread/sleep (* 1000 60 5)))))
+        (Thread/sleep (* 1000 60 15)))))
 
   (future
     (while @run-routine

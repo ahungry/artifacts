@@ -45,7 +45,6 @@ order by level desc
     woodcutting_level]))
 
 (defn get-mining-grounds [{:keys [mining_level] :as char}]
-  (prn char)
   (j/query
    db
    ["
@@ -59,7 +58,6 @@ order by level desc
     mining_level]))
 
 (defn get-crafting-grounds [type]
-  (prn char)
   (j/query
    db
    ["

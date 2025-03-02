@@ -29,10 +29,12 @@
                     :as :json
                     :coerce :always
                     } opts)]
-    (log/debug "HTTP request: " req)
-    (log/debug "HTTP request to: " url)
+    ;; (log/debug "HTTP request: " req)
+    ;; (log/debug "HTTP request to: " url)
     (try+
-     (-> (client/request req) :body)
+     (let [res (-> (client/request req) :body)]
+       ;; (log/debug "The response was: " res)
+       res)
      (catch [:status 499] {:keys [body]}
        (log/warn "Need to wait before calling: " body) body)
      (catch [:status 598] {:keys [body]}
