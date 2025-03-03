@@ -7,8 +7,6 @@
 (defn qadd [name f]
   "Add to the queue - FIFO (append right, pop left)."
   (let [k (keyword name)]
-    (if-not (clojure.test/function? f)
-      (throw (Exception. "Only functions may be added to the queue!")))
     (swap! queue (fn [y] (conj y {k (vec (conj (or (k y) []) f))})))))
 
 (defn qpop [name]
@@ -26,6 +24,8 @@
         (f)
         (catch Exception ex (log/error (str ex)))))))
 
-(defn has? [name]
+(def do-next-action fpop)
+
+(defn has-actions? [name]
   (let [k (keyword name)]
     (> (count (k @queue)) 0)))

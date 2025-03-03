@@ -16,15 +16,35 @@
    {}
    (partition 2 xs)))
 
+(defn init [{:keys [name preferred-routine forbidden-routines] :as m}]
+  (log/info "Char:" name "Routine:" preferred-routine
+            "Forbidden:" forbidden-routines)
+  (future
+    (let [char (c/fetch-char name)]
+      (c/import-char! char)
+      (c/progress char)
+      (r/do-routine! m))))
+
 (defn -main [& args]
   (let [opts (parse-opts args)
         preferred-routine (keyword (:prefer-routine opts))]
     (log/info "Starting up...")
-    (log/info "Fetching latest char data")
-    (let [char (c/fetch-char "ahungry")]
-      (c/import-char! char)
-      (c/progress char))
-    (log/info "Routine:" preferred-routine)
-    (reset! r/prefer-routine preferred-routine)
-    ;; (c/reset! prefer-routine :woodcutting)
-    (future (r/do-routine! "ahungry"))))
+    (let [my-chars
+          [
+           {:name "ahungry"
+            :preferred-routine preferred-routine
+            :forbidden-routines [:mining :woodcutting]}
+           {:name "ahungry-min"
+            :preferred-routine :mining
+            :forbidden-routines [:fighting :woodcutting :crafting :recycling :equipping]}
+           {:name "ahungry-nim"
+            :preferred-routine :mining
+            :forbidden-routines [:fighting :woodcutting :crafting :recycling :equipping]}
+           {:name "ahungry-cut"
+            :preferred-routine :woodcutting
+            :forbidden-routines [:fighting :mining :crafting :recycling :equipping]}
+           {:name "ahungry-tuc"
+            :preferred-routine :woodcutting
+            :forbidden-routines [:fighting :mining :crafting :recycling :equipping]}
+           ]]
+      (doall (map init my-chars)))))
