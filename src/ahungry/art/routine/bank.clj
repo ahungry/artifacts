@@ -40,6 +40,8 @@
 (defn has-bankable-items? [name]
   (> (count (get-bankable-items name)) 0))
 
+;; TODO: Use the queue to build a full list of actions (item) bank calls
+;; as soon as we enter this routine rather than banking one item at a time.
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.

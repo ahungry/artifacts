@@ -33,7 +33,7 @@
           [
            {:name "ahungry"
             :preferred-routine preferred-routine
-            :forbidden-routines [:mining :woodcutting]}
+            :forbidden-routines []}
            {:name "ahungry-min"
             :preferred-routine :mining
             :forbidden-routines [:fighting :woodcutting :crafting :recycling :equipping]}
