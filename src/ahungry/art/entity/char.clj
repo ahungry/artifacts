@@ -154,12 +154,31 @@ where inv.name=? and inv.code <> ''" name]))
       when 'helmet' then (select ii.quality from chars c
         left join items ii on ii.code=c.helmet_slot where c.name = inv.name)
 
-      when 'ring' then (select ii.quality from chars c
-        left join items ii on ii.code=c.ring1_slot where c.name = inv.name)
+      when 'ring' then (select min(ii.quality) from chars c
+        left join items ii on (ii.code=c.ring1_slot or ii.code=c.ring2_slot)
+        where c.name = inv.name)
 
       else -1
     end, -1)
-) as existing_quality
+) as existing_quality,
+(
+  select
+    case i.type
+      when 'ring' then (
+        select
+          case when
+            coalesce(
+              (select iii.quality from chars iic left join items iii on (iii.code=iic.ring1_slot))
+            , 0) >
+            coalesce(
+              (select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot))
+            , 0)
+          then 'ring1' else 'ring2'
+          end
+      )
+      else i.type
+    end
+) as slot_type
 from inventory inv
 left join items i on inv.code=i.code
 where inv.name=? and inv.code <> ''

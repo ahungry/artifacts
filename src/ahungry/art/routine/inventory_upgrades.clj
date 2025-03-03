@@ -23,8 +23,8 @@
     (log/info "Swapping gear..." item)
     ;; If existing_quality is -1, we already unequipped and can equip the best item
     (if (= -1 (:existing_quality item))
-      (char/do-equip! {:slot (:type item) :code (:code item)} name)
-      (char/do-unequip! {:slot (:type item)} name))))
+      (char/do-equip! {:slot (:slot_type item) :code (:code item)} name)
+      (char/do-unequip! {:slot (:slot_type item)} name))))
 
 (defn routine! [name]
   (cond
