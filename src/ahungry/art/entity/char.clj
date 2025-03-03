@@ -92,6 +92,7 @@
                         mining_level mining_xp mining_max_xp
                         gearcrafting_level gearcrafting_xp gearcrafting_max_xp
                         weaponcrafting_level weaponcrafting_xp weaponcrafting_max_xp
+                        jewelrycrafting_level jewelrycrafting_xp jewelrycrafting_max_xp
                         ] :as m}]
   (log/info
    "Progress" name "lvl:" level ", xp:" xp "/" max_xp ", gold: " gold
@@ -99,6 +100,7 @@
    "mining lvl:" mining_level ", xp: " mining_xp "/" mining_max_xp
    "gearcrafting lvl:" gearcrafting_level ", xp: " gearcrafting_xp "/" gearcrafting_max_xp
    "weaponcrafting lvl:" weaponcrafting_level ", xp: " weaponcrafting_xp "/" weaponcrafting_max_xp
+   "jewelrycrafting lvl:" jewelrycrafting_level ", xp: " jewelrycrafting_xp "/" jewelrycrafting_max_xp
    ", hp:" hp "/" max_hp)
   (log/info (emap/get-map x y)))
 
