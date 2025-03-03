@@ -157,7 +157,7 @@ where inv.name=? and inv.code <> ''" name]))
         left join items ii on ii.code=c.helmet_slot where c.name = inv.name)
 
       when 'ring' then (select min(ii.quality) from chars c
-        left join items ii on (ii.code=c.ring1_slot or ii.code=c.ring2_slot)
+        left join items ii on min(ii.code=c.ring1_slot, ii.code=c.ring2_slot)
         where c.name = inv.name)
 
       else -1
@@ -175,7 +175,7 @@ where inv.name=? and inv.code <> ''" name]))
             coalesce(
               (select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot))
             , 0)
-          then 'ring1' else 'ring2'
+          then 'ring2' else 'ring1'
           end
       )
       else i.type
