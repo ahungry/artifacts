@@ -110,7 +110,7 @@
       (do
         (j/insert! db :chars data)
         (when (> (count (:inventory char)) 0)
-          (j/delete! db :inventory [])
+          (j/delete! db :inventory ["name=?" name])
           (j/insert-multi!
            db
            :inventory
