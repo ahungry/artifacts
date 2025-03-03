@@ -37,6 +37,9 @@
         mult (apply + (map :value multiplicatives))]
     (* (+ 1 base) (+ 1 (float (/ mult 100))))))
 
+;; TODO: Need to do offensive quality and defensive quality separately
+;; then combine here (and probably save both types), as some things like hp
+;; are good for defense, but lack any offense (and vice-versa, as well as mults)
 (defn get-quality [m]
   (cond
     (= "weapon" (:type m)) (get-weapon-quality (:effects m))
