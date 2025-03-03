@@ -20,27 +20,28 @@
   (.contains ["hp" "attack_fire" "attack_earth" "attack_air" "attack_water"] code))
 
 (defn is-multiplicative? [{:keys [code]}]
-  (.contains ["res_water" "res_air" "res_earth" "res_fire" "critical_strike"] code))
+  (.contains ["dmg" "dmg_air" "dmg_water" "dmg_fire" "dmg_earth"
+              "res_water" "res_air" "res_earth" "res_fire" "critical_strike"] code))
 
 (defn get-weapon-quality [xs]
   (let [additives (filter is-additive? xs)
         multiplicatives (filter is-multiplicative? xs)
         base (apply + (map :value additives))
         mult (apply + (map :value multiplicatives))]
-    (* base (+ 1 (float (/ mult 100))))))
+    (* (+ 1 base) (+ 1 (float (/ mult 100))))))
 
 (defn get-armor-quality [xs]
   (let [additives (filter is-additive? xs)
         multiplicatives (filter is-multiplicative? xs)
         base (apply + (map :value additives))
         mult (apply + (map :value multiplicatives))]
-    (* base (+ 1 (float (/ mult 100))))))
+    (* (+ 1 base) (+ 1 (float (/ mult 100))))))
 
 (defn get-quality [m]
   (cond
     (= "weapon" (:type m)) (get-weapon-quality (:effects m))
 
-    (.contains ["boots" "helmet" "shield" "leg_armor" "body_armor"] (:type m))
+    (.contains ["ring" "boots" "helmet" "shield" "leg_armor" "body_armor"] (:type m))
     (get-armor-quality (:effects m))
 
     true 0))
@@ -59,6 +60,9 @@
 (defn inspect [x]
   (log/info "Found a set of data with " (count x) " elements.")
   x)
+
+(defn fetch-item [code]
+  (-> (sdk :get (str "/items/" code)) :data))
 
 (defn import-items! []
   (let [pages (-> (sdk :get "/items") :pages)]

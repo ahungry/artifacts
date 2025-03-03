@@ -15,6 +15,9 @@ Authorization: Bearer {{my-artifact-token}}
 *** Logs
 get /my/logs
 
+*** Effects
+get /effects
+
 *** Maps
 **** All maps
 get /maps?page=1
@@ -54,7 +57,7 @@ get /monsters/chicken
 get /items
 
 **** Single item
-get /items/copper_dagger
+get /items/cultist_hat
 
 **** Single item
 get /items/wooden_staff
