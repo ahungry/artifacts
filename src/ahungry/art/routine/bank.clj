@@ -52,11 +52,13 @@
                 {:desc payload
                  :fn (fn [] (char/do-bank-deposit! payload))}))
             (get-bankable-items name))
-       (map #(queue/qadd name %))))
+       (map #(queue/qadd name %))
+       doall))
 
 ;; TODO: Use the queue to build a full list of actions (item) bank calls
 ;; as soon as we enter this routine rather than banking one item at a time.
 (defn routine! [name]
+  (log/info "Bank routine - all items should be deposited soon" name)
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
     (not (char/full-health? name)) (char/do-rest! name)

@@ -20,7 +20,7 @@
   (log/info "Char:" name "Routine:" preferred-routine
             "Forbidden:" forbidden-routines)
   (future
-    (let [stagger (rand-int 20)]
+    (let [stagger (rand-int 5)]
       (log/info "Staggering for" stagger "seconds to avoid simultaneous calls.")
       (Thread/sleep (* 1000 stagger)))
     (let [char (c/fetch-char name)]
