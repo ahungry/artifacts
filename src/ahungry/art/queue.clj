@@ -23,9 +23,10 @@
 
 (defn fpop [name]
   "Pop off the next item from the queue and execute it if possible."
-  (let [{f :fn} (qpop name)]
+  (let [{f :fn desc :desc} (qpop name)]
     (when f
       (try
+        (log/info "Event execution:" desc)
         (f)
         (catch Exception ex (log/error (str ex)))))))
 
@@ -36,9 +37,9 @@
     (> (count (k @queue)) 0)))
 
 (defn show []
-  (doall
+  (dorun
    (map (fn [k]
-          (log/info "CURRENT QUEUE EVENTS:" k)
           (->> (map :desc (k @queue))
-               (map #(prn %))))
+               (clojure.string/join ",")
+               log/info))
         (keys @queue))))

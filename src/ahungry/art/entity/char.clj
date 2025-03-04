@@ -3,6 +3,7 @@
    [ahungry.art.repo :refer [db sdk sdk-for]]
    [ahungry.art.entity.map :as emap]
    [ahungry.art.entity.bank :as bank]
+   [ahungry.art.queue :as queue]
    [clojure.tools.logging :as log]
    [clojure.java.jdbc :as j]
    [clojure.java.io]
@@ -197,6 +198,9 @@ order by type, quality desc" name]))
     (if (:error res)
       (do
         (log/error "Action failed - fix the code..." name)
+        ;; FIXME: brute force here...
+        (log/warn "WIPING THE QUEUE - WE SHOULD NEVER BE HERE!!!")
+        (queue/clear)
         ;; (System/exit 1)
         )
       (do

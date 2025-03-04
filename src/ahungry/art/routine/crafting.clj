@@ -57,9 +57,13 @@ by either inventory space or materials in bank."
                (map
                 (fn [mat]
                   (let [bank-quantity (or (get-quantity-by-code (:material_code mat) bank-contents) 0)]
+                    (prn bank-contents)
+                    (prn (:material_code mat))
+                    (prn (get-quantity-by-code (:material_code mat) bank-contents))
+                    (prn bank-quantity)
                     (/ bank-quantity (:material_quantity mat))))
                 materials))]
-    (min minimal-bank-iterations (int (/ inv-max base-quantity)))))
+    (int (min minimal-bank-iterations (/ inv-max base-quantity)))))
 
 ;; In this case, we identified an item we can craft, but most likely,
 ;; the necessary materials are in the bank - to simplify this, empty
@@ -68,6 +72,7 @@ by either inventory space or materials in bank."
 ;; keep moving back and forth between bank and craft station.
 (defn do-full-crafting-routine! [name]
   (bank/bank-all-items! name)
+  (ebank/import-bank!)
   (let [craft-target (get-item-next name)
         materials (craft/get-materials (:code craft-target))
         iterations (get-iterations name materials)]
@@ -77,7 +82,7 @@ by either inventory space or materials in bank."
               "With " (count materials) "unique materials.")
 
     ;; We should be at the bank already...
-    (doall
+    (dorun
      (map
       (fn [{:keys [material_code material_quantity]}]
         (queue/qadd

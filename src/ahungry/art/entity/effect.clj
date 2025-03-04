@@ -27,10 +27,11 @@
   (let [pages (-> (sdk :get "/effects") :pages)]
     (log/info "About to fetch " pages "pages of effect data!")
     (j/delete! db :effects [])
-    (for [page (map inc (range pages))]
-      (let [res (sdk :get (str "/effects?page=" page))]
-        (->> res :data
-             inspect
-             (map filter-columns)
-             (j/insert-multi! db :effects))
-        nil))))
+    (dorun
+     (for [page (map inc (range pages))]
+       (let [res (sdk :get (str "/effects?page=" page))]
+         (->> res :data
+              inspect
+              (map filter-columns)
+              (j/insert-multi! db :effects))
+         nil)))))

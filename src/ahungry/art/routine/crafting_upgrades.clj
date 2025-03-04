@@ -45,7 +45,7 @@
   (let [craft-target (get-item-upgrade name)
         materials (craft/get-materials (:code craft-target))]
     ;; We should be at the bank already...
-    (doall
+    (dorun
      (map
       (fn [{:keys [material_code material_quantity]}]
         (queue/qadd

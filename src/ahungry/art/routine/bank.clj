@@ -50,7 +50,7 @@
                     :fn (fn []
                           (when (time-to-move-on? name)
                             (do-move-to-pref-area! name)))})
-  (doall (->> (map (fn [item]
+  (dorun (->> (map (fn [item]
                      (let [payload {:code (:code item)
                                     :quantity (:quantity item)}]
                        {:desc {:thing "deposit item" :payload payload}

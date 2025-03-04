@@ -50,4 +50,4 @@
             :preferred-routine :woodcutting
             :forbidden-routines [:fighting :mining :crafting :recycling :equipping]}
            ]]
-      (doall (map init my-chars)))))
+      (dorun (map init my-chars)))))

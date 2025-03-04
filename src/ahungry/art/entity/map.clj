@@ -93,10 +93,11 @@ where content_type = 'bank' "
   (let [pages (-> (sdk :get "/maps") :pages)]
     (log/info "About to fetch " pages "pages of map data!")
     ;; (j/delete! db :maps [])
-    (for [page (map inc (range pages))]
-             (let [res (sdk :get (str "/maps?page=" page))]
-               (->> res :data
-                    inspect
-                    (map filter-columns)
-                    (j/insert-multi! db :maps))
-               nil))))
+    (dorun
+     (for [page (map inc (range pages))]
+       (let [res (sdk :get (str "/maps?page=" page))]
+         (->> res :data
+              inspect
+              (map filter-columns)
+              (j/insert-multi! db :maps))
+         nil)))))

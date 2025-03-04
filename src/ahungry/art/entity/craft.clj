@@ -139,7 +139,7 @@ and i.code not in (select distinct(material_code) from crafts)"
           level (:level (:craft m))
           quantity (:quantity (:craft m))
           ]
-      (doall
+      (dorun
        (->> (map (fn [material]
                    {:code code
                     :skill skill
@@ -157,9 +157,10 @@ and i.code not in (select distinct(material_code) from crafts)"
   (let [pages (-> (sdk :get "/items") :pages)]
     (log/info "About to fetch " pages "pages of craft data!")
     (j/delete! db :crafts [])
-    (for [page (map inc (range pages))]
-      (let [res (sdk :get (str "/items?page=" page))]
-        (->> res :data
-             inspect
-             (map insert-craft-rows!))
-        nil))))
+    (dorun
+     (for [page (map inc (range pages))]
+       (let [res (sdk :get (str "/items?page=" page))]
+         (->> res :data
+              inspect
+              (map insert-craft-rows!))
+         nil)))))
