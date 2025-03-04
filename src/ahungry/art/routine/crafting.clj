@@ -57,7 +57,7 @@
      name
      {:desc (str "Withdrawing: " (:material_code craft-target))
       :fn (fn [] (char/do-bank-withdraw! {:code (:material_code craft-target)
-                                          :quantity quantity}))})
+                                          :quantity quantity} name))})
     ;; Move to the proper craft area
     (queue/qadd
      name
@@ -68,7 +68,7 @@
       (queue/qadd
        name
        {:desc (str "Crafting: " (:code craft-target))
-        :fn (fn [] (char/do-crafting! {:code (:code craft-target)}))}))
+        :fn (fn [] (char/do-crafting! {:code (:code craft-target)} name))}))
     ))
 
 (defn routine! [name]

@@ -9,20 +9,11 @@
    [clojure.string]
    [java-time.api :as jt]))
 
-(defonce last-char-name (atom nil))
-
 (defn epoch []
   (.getEpochSecond (jt/instant)))
 
 (defn to-epoch [instant]
   (.getEpochSecond (jt/instant instant)))
-
-;; For REPL convenience, save last char name used.
-(defn get-name [& [s]]
-  (when s (reset! last-char-name s))
-  (if-not (or s @last-char-name)
-    (throw (Exception. "Need to know the character name!")))
-  (or s @last-char-name))
 
 (defn get-count-items [m]
   (apply + (map :quantity m)))
@@ -197,12 +188,12 @@ order by type, quality desc" name]))
   (- (to-epoch (:cooldown_expiration (get-char name)))
      (epoch)))
 
-(defn get-hp [& [name]]
-  (select-keys (get-char (get-name name)) [:hp :max_hp]))
+(defn get-hp [name]
+  (select-keys (get-char name) [:hp :max_hp]))
 
 ;; Every action returns our character state, so we can follow the pattern here.
-(defn do-action! [action & [name body]]
-  (let [res ((sdk-for (get-name name)) action body)]
+(defn do-action! [action name & [body]]
+  (let [res ((sdk-for name) action body)]
     (if (:error res)
       (do
         (log/error "Action failed - fix the code..." name)
@@ -224,33 +215,33 @@ order by type, quality desc" name]))
 (def do-fight! (partial do-action! :fight))
 (def do-gather! (partial do-action! :gathering))
 
-(defn do-move! [{:keys [x y]} & [name]]
-  (do-action! :move (get-name name) {:x x :y y}))
+(defn do-move! [{:keys [x y]} name]
+  (do-action! :move name {:x x :y y}))
 
-(defn do-unequip! [{:keys [code slot]} & [name]]
-  (do-action! :unequip (get-name name) {:slot slot}))
+(defn do-unequip! [{:keys [code slot]} name]
+  (do-action! :unequip name {:slot slot}))
 
-(defn do-equip! [{:keys [code slot]} & [name]]
-  (do-action! :equip (get-name name) {:code code :slot slot}))
+(defn do-equip! [{:keys [code slot]} name]
+  (do-action! :equip name {:code code :slot slot}))
 
-(defn do-crafting! [{:keys [code]} & [name]]
-  (do-action! :crafting (get-name name) {:code code}))
+(defn do-crafting! [{:keys [code]} name]
+  (do-action! :crafting name {:code code}))
 
-(defn do-recycling! [{:keys [code]} & [name]]
-  (do-action! :recycling (get-name name) {:code code}))
+(defn do-recycling! [{:keys [code]} name]
+  (do-action! :recycling name {:code code}))
 
-(defn do-bank-deposit! [{:keys [code quantity]} & [name]]
-  (let [res (do-action! :bank-deposit (get-name name) {:code code :quantity quantity})]
+(defn do-bank-deposit! [{:keys [code quantity]} name]
+  (let [res (do-action! :bank-deposit name {:code code :quantity quantity})]
     (bank/import-bank!)
     res))
 
-(defn do-bank-withdraw! [{:keys [code quantity]} & [name]]
-  (let [res (do-action! :bank-withdraw (get-name name) {:code code :quantity quantity})]
+(defn do-bank-withdraw! [{:keys [code quantity]} name]
+  (let [res (do-action! :bank-withdraw name {:code code :quantity quantity})]
     (bank/import-bank!)
     res))
 
-(defn get-hunting-grounds [& [name]]
-  (let [char (get-char (get-name name))]
+(defn get-hunting-grounds [name]
+  (let [char (get-char name)]
     (-> (emap/get-hunting-grounds
          {:hp (:max_hp char)
           :attack (+ (:attack_air char)
@@ -259,8 +250,8 @@ order by type, quality desc" name]))
                      (:attack_water char))})
         first)))
 
-(defn get-woodcutting-grounds [& [name]]
-  (let [char (get-char (get-name name))]
+(defn get-woodcutting-grounds [name]
+  (let [char (get-char name)]
     (-> (emap/get-woodcutting-grounds
          {:woodcutting_level (:woodcutting_level char)})
         first)))

@@ -36,8 +36,8 @@
     (> (count (k @queue)) 0)))
 
 (defn show []
-  (log/info "CURRENT QUEUE EVENTS:")
   (map (fn [k]
+         (log/info "CURRENT QUEUE EVENTS:" k)
          (->> (map :desc (k @queue))
               (map #(prn %))))
        (keys @queue)))

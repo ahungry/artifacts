@@ -44,13 +44,13 @@
       (while @run-routine
         (Thread/sleep 1000)
         (when (char/can-act? name)
-          ;; TODO: Add a queue task system so we can have cross-char communication
-          ;; as well as a way to do multiple events in sequence.
-          ;; That will allow this behavior precedence to serve as defaults.
-          ;; TODO: Add a way to exclude certain activities
           (cond
             (queue/has-actions? name)
-            (queue/do-next-action name)
+            (do
+              (log/info "QUEUE ACTION RESPONSIBLE FOR EXECUTION!")
+              (prn @queue/queue)
+              (queue/show)
+              (queue/do-next-action name))
 
             ;; If encumbered, we can't get more items, so go craft or bank?
             ;; For now, this means convert copper ores into bars
