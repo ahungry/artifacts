@@ -20,6 +20,7 @@
   (log/info "Char:" name "Routine:" preferred-routine
             "Forbidden:" forbidden-routines)
   (future
+    (Thread/sleep (* 1000 (rand-int 20)))
     (let [char (c/fetch-char name)]
       (c/import-char! char)
       (c/progress char)

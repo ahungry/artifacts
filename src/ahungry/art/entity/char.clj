@@ -104,11 +104,16 @@
    ", hp:" hp "/" max_hp)
   (log/info (emap/get-map x y)))
 
+(defn get-char-from-db [name]
+  (-> (j/query db ["select * from chars where name = ?" name]) first))
+
 (defn import-char! [char]
   (let [data (filter-columns char)]
     (if (> (count (:name data)) 0)
       (do
-        (j/insert! db :chars data)
+        (if (get-char-from-db name)
+          (j/update! db :chars data ["name=?" name])
+          (j/insert! db :chars data))
         (when (> (count (:inventory char)) 0)
           (j/delete! db :inventory ["name=?" name])
           (j/insert-multi!
@@ -124,7 +129,7 @@
 
 (defn get-char [name]
   (or
-   (-> (j/query db ["select * from chars where name = ?" name]) first)
+   (get-char-from-db name)
    (import-char! (fetch-char name))))
 
 (defn get-inventory [name]
@@ -200,7 +205,7 @@ order by type, quality desc" name]))
   (let [res ((sdk-for (get-name name)) action body)]
     (if (:error res)
       (do
-        (log/error "Action failed - fix the code...")
+        (log/error "Action failed - fix the code..." name)
         ;; (System/exit 1)
         )
       (do

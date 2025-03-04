@@ -12,10 +12,14 @@
    [ahungry.art.entity.char :as char]))
 
 ;; TODO: Make sure none are recyclable either
-(defn get-bankable-items [name]
-  (let [usable-materials (craft/get-all-usable-materials name)]
-    (->> (bank/get-bankable-items name)
-         (filter #(not (.contains usable-materials (:code %)))))))
+;; TODO: Re-enable at some point, or figure out how to pull out items, craft, then let them
+;; reinsert.
+;; (defn get-bankable-items [name]
+;;   (let [usable-materials (craft/get-all-usable-materials name)]
+;;     (->> (bank/get-bankable-items name)
+;;          (filter #(not (.contains usable-materials (:code %)))))))
+
+(def get-bankable-items bank/get-bankable-items)
 
 (defn get-item-next [name]
   (first (get-bankable-items name)))

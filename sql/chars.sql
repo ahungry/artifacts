@@ -71,7 +71,7 @@ pragma table_info(chars);
 
 .mode csv
 
-select * from chars;
+select name, level, cooldown_expiration from chars;
 
 select name from chars;
 
