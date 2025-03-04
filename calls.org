@@ -154,4 +154,4 @@ post /action/move
 *** Deposit an item
 post /action/bank/deposit
 
-{"code": "sap", "quantity": 17}
+{"code":"ash_wood","quantity":80}

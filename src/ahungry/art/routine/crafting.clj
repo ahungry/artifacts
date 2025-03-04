@@ -45,27 +45,28 @@
 ;; In this case, we identified an item we can craft, but most likely,
 ;; the necessary materials are in the bank - to simplify this, empty
 ;; the character inventory into the bank as well.
-;; TODO: For multi-material crafts, we need to fix it up - this only works
-;; for single material crafts atm.
-((bank/bank-all-items! name)
- (let [craft-target (get-item-next name)
-       iterations (int (/ 100 (:material_quantity craft-target)))
-       quantity (* iterations (:material_quantity craft-target))]
-   (queue/qadd
-    name
-    {:desc (str "Withdrawing: " (:material_code craft-target))
-     :fn (fn [] (char/do-bank-withdraw! {:code (:material_code craft-target)
-                                         :quantity quantity}))})
-   (queue/qadd
-    name
-    {:desc (str "Move to crafting area: ")
-     :fn (fn [] (when (time-to-move-on? name) (do-move-to-pref-area! name)))})
-   (dotimes [_ iterations]
-     (queue/qadd
-      name
-      {:desc (str "Crafting: " (:code craft-target))
-       :fn (fn [] (char/do-crafting! {:code (:code craft-target)}))}))
-   ))
+;; TODO: We need to calculate the total crafts we can do so we don't
+;; keep moving back and forth between bank and craft station.
+(defn do-full-crafting-routine! [name]
+  (bank/bank-all-items! name)
+  (let [craft-target (get-item-next name)
+        iterations (int (/ 80 (:material_quantity craft-target)))
+        quantity (* iterations (:material_quantity craft-target))]
+    (queue/qadd
+     name
+     {:desc (str "Withdrawing: " (:material_code craft-target))
+      :fn (fn [] (char/do-bank-withdraw! {:code (:material_code craft-target)
+                                          :quantity quantity}))})
+    (queue/qadd
+     name
+     {:desc (str "Move to crafting area: ")
+      :fn (fn [] (when (time-to-move-on? name) (do-move-to-pref-area! name)))})
+    (dotimes [_ iterations]
+      (queue/qadd
+       name
+       {:desc (str "Crafting: " (:code craft-target))
+        :fn (fn [] (char/do-crafting! {:code (:code craft-target)}))}))
+    ))
 
 (defn routine! [name]
   (cond

@@ -36,4 +36,4 @@
     (> (count (k @queue)) 0)))
 
 (defn show []
-  @queue)
+  (log/info @queue))
