@@ -13,8 +13,9 @@
   (let [char (char/get-char name)]
     (-> (emap/get-woodcutting-grounds
          {:woodcutting_level (min (:woodcutting_level char)
-                                  (:gearcrafting_level char)
-                                  (:weaponcrafting_level char))})
+                                  ;; (:gearcrafting_level char)
+                                  ;; (:weaponcrafting_level char)
+                                  )})
         first)))
 
 (defn do-move-to-pref-area! [name]
