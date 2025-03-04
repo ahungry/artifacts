@@ -118,7 +118,7 @@ select i.*, c.skill from inventory i
 left join items it on i.code = it.code
 left join crafts c on i.code = c.code
 where i.name = ?
-and it.type IN ('weapon', 'boots', 'helmet', 'shield', 'leg_armor', 'body_armor')
+and it.type IN ('weapon', 'boots', 'helmet', 'shield', 'leg_armor', 'body_armor', 'ring', 'amulet')
 and i.code <> ''
 and i.code not in (select distinct(material_code) from crafts)"
                name]))

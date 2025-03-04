@@ -151,6 +151,11 @@ post /action/move
 
 {"x": 4, "y": 1}
 
+*** Withdraw an item
+post /action/bank/withdraw
+
+{"code":"copper_ring","quantity":78}
+
 *** Deposit an item
 post /action/bank/deposit
 

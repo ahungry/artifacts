@@ -13,4 +13,7 @@ CREATE TABLE effects (
 pragma table_info(effects);
 
 select code, description, type
-from effects where type='equipment';
+from effects where type='equipment'
+limit 3;
+
+-- .mode foo
