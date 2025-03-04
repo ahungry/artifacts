@@ -4,6 +4,9 @@
 
 (def queue (atom {}))
 
+(defn clear []
+  (reset! queue {}))
+
 (defn qadd [name f]
   "Add to the queue - FIFO (append right, pop left)."
   (let [k (keyword name)]
@@ -18,7 +21,7 @@
 
 (defn fpop [name]
   "Pop off the next item from the queue and execute it if possible."
-  (let [f (qpop name)]
+  (let [{f :fn} (qpop name)]
     (when f
       (try
         (f)
@@ -29,3 +32,6 @@
 (defn has-actions? [name]
   (let [k (keyword name)]
     (> (count (k @queue)) 0)))
+
+(defn show []
+  @queue)

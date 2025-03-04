@@ -6,6 +6,7 @@
    [clojure.string]
    [java-time.api :as jt]
    [ahungry.art.repo :refer [db sdk sdk-for]]
+   [ahungry.art.queue :as queue]
    [ahungry.art.entity.map :as emap]
    [ahungry.art.entity.bank :as bank]
    [ahungry.art.entity.craft :as craft]
@@ -44,6 +45,15 @@
 (defn has-bankable-items? [name]
   (> (count (get-bankable-items name)) 0))
 
+(defn bank-all-items! [name]
+  (->> (map (fn [item]
+              (let [payload {:code (:code item)
+                             :quantity (:quantity item)}]
+                {:desc payload
+                 :fn (fn [] (char/do-bank-deposit! payload))}))
+            (get-bankable-items name))
+       (map #(queue/qadd name %))))
+
 ;; TODO: Use the queue to build a full list of actions (item) bank calls
 ;; as soon as we enter this routine rather than banking one item at a time.
 (defn routine! [name]
@@ -56,7 +66,9 @@
     ;; See if we need to relocate
     (time-to-move-on? name) (do-move-to-pref-area! name)
 
+    true (bank-all-items! name)
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (let [item (get-item-next name)]
-           (char/do-bank-deposit! {:code (:code item)
-                                   :quantity (:quantity item)} name))))
+    ;; true (let [item (get-item-next name)]
+    ;;        (char/do-bank-deposit! {:code (:code item)
+    ;;                                :quantity (:quantity item)} name))
+    ))
