@@ -57,10 +57,6 @@ by either inventory space or materials in bank."
                (map
                 (fn [mat]
                   (let [bank-quantity (or (get-quantity-by-code (:material_code mat) bank-contents) 0)]
-                    (prn bank-contents)
-                    (prn (:material_code mat))
-                    (prn (get-quantity-by-code (:material_code mat) bank-contents))
-                    (prn bank-quantity)
                     (/ bank-quantity (:material_quantity mat))))
                 materials))]
     (int (min minimal-bank-iterations (/ inv-max base-quantity)))))
