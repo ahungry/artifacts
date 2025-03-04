@@ -101,6 +101,7 @@ group by code
           (= "ring" (:type item)) :ring2_slot
           (= "shield" (:type item)) :shield_slot
           (= "rune" (:type item)) :rune_slot
+          (= "amulet" (:type item)) :amulet_slot
           (= "weapon" (:type item)) :weapon_slot)
         existing-item (first (i/get-item (equipped-item-lookup char)))]
     (if existing-item
