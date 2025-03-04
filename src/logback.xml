@@ -4,7 +4,7 @@
     <encoder>
       <pattern>
         <!--%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-10contextName %logger{36} - %msg%n-->
-        %-5level %logger{36} - %msg%n
+        %d{HH:mm:ss} %-5level %logger{36} - %msg%n
       </pattern>
     </encoder>
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
