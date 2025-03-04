@@ -10,6 +10,8 @@
 (defn qadd [name f]
   "Add to the queue - FIFO (append right, pop left)."
   (let [k (keyword name)]
+    (if-not (:fn f)
+      (throw (Exception. "Please include a proper :fn in the qadd map.")))
     (swap! queue (fn [y] (conj y {k (vec (conj (or (k y) []) f))})))))
 
 (defn qpop [name]

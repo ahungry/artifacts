@@ -68,14 +68,14 @@
   (-> (sdk :get (str "/items/" code)) :data))
 
 (defn import-items! []
-  (let [pages (-> (sdk :get "/items") :pages)]
-    (log/info "About to fetch " pages "pages of item data!")
-    (j/delete! db :items [])
-    (for [page (map inc (range pages))]
-             (let [res (sdk :get (str "/items?page=" page))]
-               (->> res :data
-                    inspect
-                    (map filter-columns)
-                    (j/insert-multi! db :items)
-                    doall)
-               nil))))
+  (doall
+   (let [pages (-> (sdk :get "/items") :pages)]
+     (log/info "About to fetch " pages "pages of item data!")
+     (j/delete! db :items [])
+     (for [page (map inc (range pages))]
+       (let [res (sdk :get (str "/items?page=" page))]
+         (->> res :data
+              inspect
+              (map filter-columns)
+              (j/insert-multi! db :items))
+         nil)))))

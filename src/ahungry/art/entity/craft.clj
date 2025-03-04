@@ -21,9 +21,22 @@ left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
   (= 1 (count (j/query db ["select * from inventory where name=? and code=? and quantity>=?"
                            name material_code material_quantity]))))
 
+(defn has-material-in-inventory-or-bank? [name {:keys [material_code material_quantity]}]
+  (= 1 (count (j/query db ["
+select code, sum(quantity) from
+  (
+   select code, quantity from inventory where name=?
+   union
+   select code, quantity from bank
+  )
+where code =? and quantity >= ?
+group by code
+" name material_code material_quantity]))))
+
 (defn has-materials? [name craft]
   (let [reagent-count (count craft)
-        has-it? (partial has-material-in-inventory? name)
+        ;; has-it? (partial has-material-in-inventory? name)
+        has-it? (partial has-material-in-inventory-or-bank? name)
         inventory-matches (filter has-it? craft)
         inventory-count (count inventory-matches)]
     (= inventory-count reagent-count)))
@@ -123,15 +136,15 @@ and i.code not in (select distinct(material_code) from crafts)"
           level (:level (:craft m))
           quantity (:quantity (:craft m))
           ]
-      (->> (map (fn [material]
-                  {:code code
-                   :skill skill
-                   :level level
-                   :quantity quantity
-                   :material_code (:code material)
-                   :material_quantity (:quantity material)}) (:items (:craft m)))
-           (j/insert-multi! db :crafts)
-           doall))))
+      (doall
+       (->> (map (fn [material]
+                   {:code code
+                    :skill skill
+                    :level level
+                    :quantity quantity
+                    :material_code (:code material)
+                    :material_quantity (:quantity material)}) (:items (:craft m)))
+            (j/insert-multi! db :crafts))))))
 
 (defn inspect [x]
   (log/info "Found a set of data with " (count x) " elements.")
@@ -142,9 +155,8 @@ and i.code not in (select distinct(material_code) from crafts)"
     (log/info "About to fetch " pages "pages of craft data!")
     (j/delete! db :crafts [])
     (for [page (map inc (range pages))]
-             (let [res (sdk :get (str "/items?page=" page))]
-               (->> res :data
-                    inspect
-                    (map insert-craft-rows!)
-                    doall)
-               nil))))
+      (let [res (sdk :get (str "/items?page=" page))]
+        (->> res :data
+             inspect
+             (map insert-craft-rows!))
+        nil))))

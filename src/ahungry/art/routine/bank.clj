@@ -46,14 +46,16 @@
   (> (count (get-bankable-items name)) 0))
 
 (defn bank-all-items! [name]
-  (->> (map (fn [item]
-              (let [payload {:code (:code item)
-                             :quantity (:quantity item)}]
-                {:desc payload
-                 :fn (fn [] (char/do-bank-deposit! payload))}))
-            (get-bankable-items name))
-       (map #(queue/qadd name %))
-       doall))
+  (queue/qadd name {:fn (fn []
+                          (when (time-to-move-on? name)
+                            (do-move-to-pref-area! name)))})
+  (doall (->> (map (fn [item]
+                     (let [payload {:code (:code item)
+                                    :quantity (:quantity item)}]
+                       {:desc payload
+                        :fn (fn [] (char/do-bank-deposit! payload))}))
+                   (get-bankable-items name))
+              (map #(queue/qadd name %)))))
 
 ;; TODO: Use the queue to build a full list of actions (item) bank calls
 ;; as soon as we enter this routine rather than banking one item at a time.
@@ -66,7 +68,7 @@
     (not (has-bankable-items? name)) (log/info "Routine bank, nothing to do!")
 
     ;; See if we need to relocate
-    (time-to-move-on? name) (do-move-to-pref-area! name)
+    ;; (time-to-move-on? name) (do-move-to-pref-area! name)
 
     true (bank-all-items! name)
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)

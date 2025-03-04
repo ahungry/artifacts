@@ -244,6 +244,11 @@ order by type, quality desc" name]))
     (bank/import-bank!)
     res))
 
+(defn do-bank-withdraw! [{:keys [code quantity]} & [name]]
+  (let [res (do-action! :bank-withdraw (get-name name) {:code code :quantity quantity})]
+    (bank/import-bank!)
+    res))
+
 (defn get-hunting-grounds [& [name]]
   (let [char (get-char (get-name name))]
     (-> (emap/get-hunting-grounds
