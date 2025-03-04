@@ -111,7 +111,7 @@
            db
            :inventory
            (map (fn [inv] (merge {:name (:name char)} inv)) (:inventory char ))))
-        (progress data)
+        ;; (progress data)
         data)
       (log/error "Somehow an empty character import occurred..."))))
 
@@ -200,7 +200,7 @@ order by type, quality desc" name]))
         ;; (System/exit 1)
         )
       (do
-        (log/info "Action success for:" action)
+        ;; (log/info "Action success for:" action)
         ;; (log/info "Next delay pre-update: " (get-delay name))
         ;; (log/info "Cooldown data object:" (get-in res [:data :cooldown]))
         ;; (log/info "Cooldown data character:" (get-in res [:data :character :cooldown_expiration]))

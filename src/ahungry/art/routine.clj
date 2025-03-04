@@ -89,7 +89,8 @@
                  (= :woodcutting @prefer-routine)) (woodcutting/routine! name)
 
             true (log/error "Nothing to do - the prefer-routine is wrong..." name @prefer-routine))
-          (log/info "Next action available in: " (char/get-delay name) name)))
+          ;; (log/info "Next action available in: " (char/get-delay name) name)
+          ))
       (log/info "Ending routine cycle for " name))))
 
 (defn stop-routine []

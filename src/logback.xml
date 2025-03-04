@@ -65,13 +65,13 @@
   <!--<logger name="clojure-example-logback-integration" level="DEBUG"/>-->
 
   <!--<logger name="ahungry" level="${APP_LOGGING_LEVEL:-TRACE}" additivity="false">-->
-  <logger name="ahungry" level="INFO" additivity="false">
+  <logger name="ahungry" level="DEBUG" additivity="false">
     <appender-ref ref="DEBUGFILE"/>
     <appender-ref ref="FILE"/>
     <appender-ref ref="CONSOLE"/>
   </logger>
 
-  <logger name="user" level="INFO" additivity="false">
+  <logger name="user" level="DEBUG" additivity="false">
     <appender-ref ref="DEBUGFILE"/>
     <appender-ref ref="FILE"/>
     <appender-ref ref="CONSOLE"/>

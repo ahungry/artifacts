@@ -25,7 +25,7 @@
       (Thread/sleep (* 1000 stagger)))
     (let [char (c/fetch-char name)]
       (c/import-char! char)
-      (c/progress char)
+      ;; (c/progress char)
       (r/do-routine! m))))
 
 (defn -main [& args]
