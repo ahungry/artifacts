@@ -52,15 +52,18 @@
   (let [craft-target (get-item-next name)
         iterations (int (/ 80 (:material_quantity craft-target)))
         quantity (* iterations (:material_quantity craft-target))]
+    ;; We should be at the bank already...
     (queue/qadd
      name
      {:desc (str "Withdrawing: " (:material_code craft-target))
       :fn (fn [] (char/do-bank-withdraw! {:code (:material_code craft-target)
                                           :quantity quantity}))})
+    ;; Move to the proper craft area
     (queue/qadd
      name
      {:desc (str "Move to crafting area: ")
       :fn (fn [] (when (time-to-move-on? name) (do-move-to-pref-area! name)))})
+    ;; Repeat the craft
     (dotimes [_ iterations]
       (queue/qadd
        name

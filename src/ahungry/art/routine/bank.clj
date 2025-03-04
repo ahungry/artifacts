@@ -46,14 +46,15 @@
   (> (count (get-bankable-items name)) 0))
 
 (defn bank-all-items! [name]
-  (queue/qadd name {:fn (fn []
+  (queue/qadd name {:desc "Move to the bank area"
+                    :fn (fn []
                           (when (time-to-move-on? name)
                             (do-move-to-pref-area! name)))})
   (doall (->> (map (fn [item]
                      (let [payload {:code (:code item)
                                     :quantity (:quantity item)}]
-                       {:desc payload
-                        :fn (fn [] (char/do-bank-deposit! payload))}))
+                       {:desc {:thing "deposit item" :payload payload}
+                        :fn (fn [] (char/do-bank-deposit! payload name))}))
                    (get-bankable-items name))
               (map #(queue/qadd name %)))))
 
