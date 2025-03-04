@@ -5,7 +5,9 @@
    [clojure.java.io]
    [clojure.string]
    [java-time.api :as jt]
+   [ahungry.art.queue :as queue]
    [ahungry.art.repo :refer [db sdk sdk-for]]
+   [ahungry.art.routine.bank :as bank]
    [ahungry.art.entity.map :as emap]
    [ahungry.art.entity.craft :as craft]
    [ahungry.art.entity.char :as char]))
@@ -37,6 +39,34 @@
     (swap! pending-equippables conj {name item})
     (char/do-crafting! {:code (:code item)} name)))
 
+;; Copied from crafting.clj - needs refinement
+(defn do-full-crafting-routine! [name]
+  (bank/bank-all-items! name)
+  (let [craft-target (get-item-upgrade name)
+        materials (craft/get-materials (:code craft-target))]
+    ;; We should be at the bank already...
+    (doall
+     (map
+      (fn [{:keys [material_code material_quantity]}]
+        (queue/qadd
+         name
+         {:desc (str "Withdrawing for upgrade: " material_code)
+          :fn (fn [] (char/do-bank-withdraw! {:code material_code
+                                              :quantity material_quantity} name))}))
+      materials))
+
+    ;; Move to the proper craft area
+    (queue/qadd
+     name
+     {:desc (str "Move to crafting area for upgrade: ")
+      :fn (fn [] (when (time-to-move-on? name) (do-move-to-pref-area! name)))})
+
+    (queue/qadd
+     name
+     {:desc (str "Crafting upgrade: " (:code craft-target))
+      :fn (fn [] (char/do-crafting! {:code (:code craft-target)} name))})
+    ))
+
 (defn has-pending-equippable? [name]
   (get @pending-equippables name))
 
@@ -63,4 +93,6 @@
     (time-to-move-on? name) (do-move-to-pref-area! name)
 
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)
-    true (do-crafting! name)))
+    true (do-full-crafting-routine! name)
+    ;; true (do-crafting! name)
+    ))

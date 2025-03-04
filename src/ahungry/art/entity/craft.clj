@@ -17,6 +17,9 @@ left join items i on c.code = i.code where c.code=?" code]))
   (j/query db ["select distinct(c.code) from crafts c
 left join items i on c.code = i.code where 1=?" 1] {:row-fn :code}))
 
+(defn get-materials [code]
+  (j/query db ["select * from crafts where code=?" code]))
+
 (defn has-material-in-inventory? [name {:keys [material_code material_quantity]}]
   (= 1 (count (j/query db ["select * from inventory where name=? and code=? and quantity>=?"
                            name material_code material_quantity]))))

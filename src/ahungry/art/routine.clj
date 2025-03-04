@@ -64,6 +64,11 @@
                  (inventory_upgrades/has-equippable-upgrades? name))
             (inventory_upgrades/routine! name)
 
+            ;; Maybe we can do some recycling?
+            (and (is-allowed? :recycling)
+                 (recycling/has-recyclables? name))
+            (recycling/routine! name)
+
             ;; If we see potential for an item upgrade, go make it and equip it
             (and (is-allowed? :equipping)
                  (crafting_upgrades/has-craftable-upgrades? name))
@@ -73,11 +78,6 @@
             (and (is-allowed? :crafting)
                  (crafting/has-craftable-items? name))
             (crafting/routine! name)
-
-            ;; Maybe we can do some recycling?
-            (and (is-allowed? :recycling)
-                 (recycling/has-recyclables? name))
-            (recycling/routine! name)
 
             ;; Non-conditional options
             (and (is-allowed? :fighting)
