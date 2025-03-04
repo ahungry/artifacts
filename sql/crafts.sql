@@ -30,3 +30,17 @@ where code = 'copper_armor'
 ;
 
 select * from inventory;
+
+.help mode
+
+.mode line
+
+select * FROM crafts c
+left join items i on c.code=i.code
+where type='amulet'
+and c.level = 10
+;
+
+.headings on
+
+.mode columns
