@@ -46,5 +46,5 @@
 
 (defn sdk-for [char-name]
   (fn [action & [body]]
-    ;; (log/debug "Called with: " action)
+    (log/debug "Actor::" char-name "Action::" action)
     (sdk :post (str "/my/" char-name "/action/" (kw->route action)) {:body (generate-string body)})))

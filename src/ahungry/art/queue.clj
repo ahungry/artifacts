@@ -40,7 +40,7 @@
   (dorun
    (map (fn [k]
           (->> (map :desc (k @queue))
-               (clojure.string/join " :: ")
+               (clojure.string/join "\n  :: ")
                ((fn [s] (when (> (count s) 0))
-                  (log/info k "::" s)))))
+                  (log/info k "queue:\n  ::" s)))))
         (keys @queue))))
