@@ -48,7 +48,6 @@
             (queue/has-actions? name)
             (do
               (log/info "QUEUE ACTION RESPONSIBLE FOR EXECUTION!")
-              (prn @queue/queue)
               (queue/show)
               (queue/do-next-action name))
 
