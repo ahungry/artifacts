@@ -97,7 +97,8 @@ group by code
           (= "leg_armor" (:type item)) :leg_armor_slot
           (= "boots" (:type item)) :boots_slot
           (= "helmet" (:type item)) :helmet_slot
-          (= "ring" (:type item)) :ring_slot
+          ;; TODO: Need to handle comparison against both slots
+          (= "ring" (:type item)) :ring2_slot
           (= "shield" (:type item)) :shield_slot
           (= "rune" (:type item)) :rune_slot
           (= "weapon" (:type item)) :weapon_slot)
