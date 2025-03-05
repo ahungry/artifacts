@@ -27,7 +27,7 @@ where name=? and code <> '' and quantity > 0 order by quantity desc" name]))
 (defn import-bank! []
   (let [pages (-> (sdk :get "/my/bank/items") :pages)]
     (log/info "About to fetch " pages "pages of bank data!")
-    ;; (j/delete! db :bank [])
+    (j/delete! db :bank [])
     (dorun
      (for [page (map inc (range pages))]
        (let [res (sdk :get (str "/my/bank/items?page=" page))]
