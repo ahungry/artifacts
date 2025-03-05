@@ -78,3 +78,5 @@ select name from chars;
 select count(*) from chars;
 
 select count(*) from chars where name = 'ahungry';
+
+select min(1, 2, 3);

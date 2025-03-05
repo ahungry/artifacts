@@ -16,7 +16,11 @@
                                   ;; (:gearcrafting_level char)
                                   ;; (:weaponcrafting_level char)
                                   )})
-        first)))
+        ;; Highest level
+        ;; first
+        ;; Lowest level
+        last
+        )))
 
 (defn do-move-to-pref-area! [name]
   (let [area (get-pref-area name)]

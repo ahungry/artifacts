@@ -154,7 +154,7 @@ post /action/move
 *** Withdraw an item
 post /action/bank/withdraw
 
-{"code":"copper_ring","quantity":78}
+{"code":"life_amulet","quantity":1}
 
 *** Deposit an item
 post /action/bank/deposit

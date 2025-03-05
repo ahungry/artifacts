@@ -99,9 +99,12 @@ group by code
           (= "helmet" (:type item)) :helmet_slot
           ;; TODO: Need to handle comparison against both slots
           (= "ring" (:type item)) :ring2_slot
+          (= "artifact" (:type item)) :artifact2_slot
+          (= "utility" (:type item)) :utility2_slot
           (= "shield" (:type item)) :shield_slot
           (= "rune" (:type item)) :rune_slot
           (= "amulet" (:type item)) :amulet_slot
+          (= "bag" (:type item)) :bag_slot
           (= "weapon" (:type item)) :weapon_slot)
         existing-item (first (i/get-item (equipped-item-lookup char)))]
     (if existing-item
@@ -114,6 +117,7 @@ group by code
          (filter #(> (:quality %) 0))
          (filter (partial is-better-than-equipped? char)))))
 
+;; TODO: Add artifact, bag, utility, rune - once we know auto equip works
 (defn get-recyclables [name]
   (j/query db ["
 select i.*, c.skill from inventory i

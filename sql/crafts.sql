@@ -38,7 +38,7 @@ select * from inventory;
 select * FROM crafts c
 left join items i on c.code=i.code
 where type='amulet'
-and c.level = 10
+and c.level = 5
 ;
 
 .headings on
