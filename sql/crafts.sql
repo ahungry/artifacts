@@ -41,6 +41,9 @@ where type='amulet'
 and c.level = 5
 ;
 
+select * from crafts c
+where c.code='wolf_ears';
+
 .headings on
 
 .mode columns

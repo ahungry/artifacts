@@ -60,7 +60,7 @@ get /items
 get /items/fried_eggs
 
 **** Single item
-get /items/wooden_staff
+get /items/wolf_ears
 
 **** Single item
 get /items/copper_boots

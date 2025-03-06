@@ -25,13 +25,12 @@ select iii.quality from chars iic left join items iii on (iii.code=iic.ring1_slo
 
 select (iii.quality - 1) from chars iic left join items iii on (iii.code=iic.ring2_slot);
 
-select
-case when
-  coalesce(
-    null
-  , 0) >
-  coalesce(
-    (select (iiii.quality - 1) from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot))
-  , 0)
-then 'ring2' else 'ring1'
-end;
+-- recyclables
+select i.*, c.skill from inventory i
+left join items it on i.code = it.code
+inner join crafts c on i.code = c.code
+where i.code = 'wolf_ears'
+and it.type IN ('weapon', 'boots', 'helmet', 'shield', 'leg_armor', 'body_armor', 'ring', 'amulet')
+and i.code <> ''
+and i.code not in (select distinct(material_code) from crafts)
+;

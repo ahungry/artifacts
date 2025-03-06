@@ -122,7 +122,7 @@ group by code
   (j/query db ["
 select i.*, c.skill from inventory i
 left join items it on i.code = it.code
-left join crafts c on i.code = c.code
+inner join crafts c on i.code = c.code
 where i.name = ?
 and it.type IN ('weapon', 'boots', 'helmet', 'shield', 'leg_armor', 'body_armor', 'ring', 'amulet')
 and i.code <> ''
