@@ -154,7 +154,7 @@ post /action/move
 *** Withdraw an item
 post /action/bank/withdraw
 
-{"code":"apple","quantity":100}
+{"code":"cooked_chicken","quantity":80}
 
 *** Deposit an item
 post /action/bank/deposit

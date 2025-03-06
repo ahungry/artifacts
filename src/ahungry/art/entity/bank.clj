@@ -10,6 +10,11 @@
 (defn get-bank []
   (j/query db ["select * from bank order by quantity desc"]))
 
+(defn get-food []
+  (j/query db ["select * from bank b
+left join items i on b.code=i.code
+where i.type='consumable' order by quantity asc"]))
+
 ;; Basically anything in inventory except for consumables
 ;; TODO: Probably add potions or w/e here later.
 (defn get-bankable-items [name]

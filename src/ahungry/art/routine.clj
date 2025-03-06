@@ -15,6 +15,7 @@
    [ahungry.art.routine.crafting :as crafting]
    [ahungry.art.routine.crafting_upgrades :as crafting_upgrades]
    [ahungry.art.routine.inventory_upgrades :as inventory_upgrades]
+   [ahungry.art.routine.foodie :as foodie]
    [ahungry.art.entity.map :as emap]))
 
 (defonce run-routine (atom nil))
@@ -59,6 +60,11 @@
             (bank/routine! name)
 
             ;; Conditional options
+            (and (is-allowed? :eating)
+                 (foodie/has-no-food? name)
+                 (foodie/has-food-in-bank? name))
+            (foodie/routine! name)
+
             (and (is-allowed? :equipping)
                  (inventory_upgrades/has-equippable-upgrades? name))
             (inventory_upgrades/routine! name)
