@@ -17,9 +17,9 @@
                                   ;; (:weaponcrafting_level char)
                                   )})
         ;; Highest level
-        ;; first
+        first
         ;; Lowest level
-        last
+        ;; last
         )))
 
 (defn do-move-to-pref-area! [name]

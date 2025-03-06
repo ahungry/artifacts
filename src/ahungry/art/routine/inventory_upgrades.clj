@@ -22,7 +22,8 @@
   (let [item (get-item-upgrade name)]
     (log/info "Swapping gear..." item)
     ;; If existing_quality is -1, we already unequipped and can equip the best item
-    (if (= -1 (:existing_quality item))
+    (if (= -1 (min (:existing_quality item)
+                   (:existing_quality2 item)))
       (char/do-equip! {:slot (:slot_type item) :code (:code item)} name)
       (char/do-unequip! {:slot (:slot_type item)} name))))
 

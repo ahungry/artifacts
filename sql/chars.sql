@@ -80,3 +80,29 @@ select count(*) from chars;
 select count(*) from chars where name = 'ahungry';
 
 select min(1, 2, 3);
+
+select * from items where code='iron_ring';
+
+select * from items where code='copper_ring';
+
+select min(ii.quality) from chars c
+left join items ii on min(ii.code=c.ring1_slot, ii.code=c.ring2_slot)
+where c.name = 'ahungry';
+
+select i.quality, i.*, c.ring1_slot, c.ring2_slot from chars c
+left join items i on (i.code=ring2_slot or i.code=ring1_slot)
+where c.name = 'ahungry' order by i.quality asc limit 2;
+
+select
+  case when
+      (select coalesce(iii.quality, 0) from chars iic left join items iii on (iii.code=iic.ring1_slot) where iic.name='ahungry')
+      >
+      (select coalesce(iiii.quality, 0) from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot) where iiic.name='ahungry')
+  then 'ring2' else 'ring1'
+end;
+
+select 1+1;
+
+select coalesce(iii.quality) from chars iic left join items iii on (iii.code=iic.ring1_slot);
+
+select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot);

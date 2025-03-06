@@ -162,21 +162,61 @@ where inv.name=? and inv.code <> ''" name]))
       when 'bag' then (select ii.quality from chars c
         left join items ii on ii.code=c.bag_slot where c.name = inv.name)
 
-      when 'utility' then (select min(ii.quality) from chars c
-        left join items ii on min(ii.code=c.utility1_slot, ii.code=c.utility2_slot)
-        where c.name = inv.name)
+      when 'utility' then (select ii.quality from chars c
+        left join items ii on ii.code=c.utility1_slot where c.name = inv.name)
 
-      when 'ring' then (select min(ii.quality) from chars c
-        left join items ii on min(ii.code=c.ring1_slot, ii.code=c.ring2_slot)
-        where c.name = inv.name)
+      when 'ring' then (select ii.quality from chars c
+        left join items ii on ii.code=c.ring1_slot where c.name = inv.name)
 
-      when 'artifact' then (select min(ii.quality) from chars c
-        left join items ii on min(ii.code=c.artifact1_slot, ii.code=c.artifact2_slot, ii.code=c.artifact3_slot)
-        where c.name = inv.name)
+      when 'artifact' then (select ii.quality from chars c
+        left join items ii on ii.code=c.artifact1_slot where c.name = inv.name)
 
       else -1
     end, -1)
 ) as existing_quality,
+(
+  select
+    coalesce(case i.type
+
+      when 'weapon' then (select ii.quality from chars c
+        left join items ii on ii.code=c.weapon_slot where c.name = inv.name)
+
+      when 'boots' then (select ii.quality from chars c
+        left join items ii on ii.code=c.boots_slot where c.name = inv.name)
+
+      when 'body_armor' then (select ii.quality from chars c
+        left join items ii on ii.code=c.body_armor_slot where c.name = inv.name)
+
+      when 'leg_armor' then (select ii.quality from chars c
+        left join items ii on ii.code=c.leg_armor_slot where c.name = inv.name)
+
+      when 'shield' then (select ii.quality from chars c
+        left join items ii on ii.code=c.shield_slot where c.name = inv.name)
+
+      when 'helmet' then (select ii.quality from chars c
+        left join items ii on ii.code=c.helmet_slot where c.name = inv.name)
+
+      when 'amulet' then (select ii.quality from chars c
+        left join items ii on ii.code=c.amulet_slot where c.name = inv.name)
+
+      when 'rune' then (select ii.quality from chars c
+        left join items ii on ii.code=c.rune_slot where c.name = inv.name)
+
+      when 'bag' then (select ii.quality from chars c
+        left join items ii on ii.code=c.bag_slot where c.name = inv.name)
+
+      when 'utility' then (select ii.quality from chars c
+        left join items ii on ii.code=c.utility2_slot where c.name = inv.name)
+
+      when 'ring' then (select ii.quality from chars c
+        left join items ii on ii.code=c.ring2_slot where c.name = inv.name)
+
+      when 'artifact' then (select ii.quality from chars c
+        left join items ii on ii.code=c.artifact2_slot where c.name = inv.name)
+
+      else -1
+    end, -1)
+) as existing_quality2,
 (
   select
     case i.type
@@ -184,12 +224,11 @@ where inv.name=? and inv.code <> ''" name]))
       when 'ring' then (
         select
           case when
-            coalesce(
-              (select iii.quality from chars iic left join items iii on (iii.code=iic.ring1_slot))
-            , 0) >
-            coalesce(
-              (select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.ring2_slot))
-            , 0)
+            (select coalesce(iii.quality, 0) from chars iic
+             left join items iii on (iii.code=iic.ring1_slot) where iic.name=inv.name)
+            >
+            (select coalesce(iiii.quality, 0) from chars iiic
+             left join items iiii on (iiii.code=iiic.ring2_slot) where iiic.name=inv.name)
           then 'ring2' else 'ring1'
           end
       )
@@ -197,12 +236,11 @@ where inv.name=? and inv.code <> ''" name]))
       when 'utility' then (
         select
           case when
-            coalesce(
-              (select iii.quality from chars iic left join items iii on (iii.code=iic.utility1_slot))
-            , 0) >
-            coalesce(
-              (select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.utility2_slot))
-            , 0)
+            (select coalesce(iii.quality, 0) from chars iic
+             left join items iii on (iii.code=iic.utility1_slot) where iic.name=inv.name)
+            >
+            (select coalesce(iiii.quality, 0) from chars iiic
+             left join items iiii on (iiii.code=iiic.utility2_slot) where iiic.name=inv.name)
           then 'utility2' else 'utility1'
           end
       )
@@ -211,12 +249,11 @@ where inv.name=? and inv.code <> ''" name]))
       when 'artifact' then (
         select
           case when
-            coalesce(
-              (select iii.quality from chars iic left join items iii on (iii.code=iic.artifact1_slot))
-            , 0) >
-            coalesce(
-              (select iiii.quality from chars iiic left join items iiii on (iiii.code=iiic.artifact2_slot))
-            , 0)
+            (select coalesce(iii.quality, 0) from chars iic
+             left join items iii on (iii.code=iic.artifact1_slot) where iic.name=inv.name)
+            >
+            (select coalesce(iiii.quality, 0) from chars iiic
+             left join items iiii on (iiii.code=iiic.artifact2_slot) where iiic.name=inv.name)
           then 'artifact2' else 'artifact1'
           end
       )
@@ -229,7 +266,7 @@ left join items i on inv.code=i.code
 where inv.name=? and inv.code <> ''
 and i.type in ('weapon', 'boots', 'body_armor', 'leg_armor', 'utility',
 'shield', 'helmet', 'ring', 'amulet', 'rune', 'bag', 'artifact')
-and quality > existing_quality
+and quality > (existing_quality or existing_quality2)
 order by type, quality desc" name]))
 
 (defn get-delay [name]
