@@ -266,7 +266,7 @@ left join items i on inv.code=i.code
 where inv.name=? and inv.code <> ''
 and i.type in ('weapon', 'boots', 'body_armor', 'leg_armor', 'utility',
 'shield', 'helmet', 'ring', 'amulet', 'rune', 'bag', 'artifact')
-and quality > (existing_quality or existing_quality2)
+and quality > min(existing_quality, existing_quality2)
 order by type, quality desc" name]))
 
 (defn get-delay [name]

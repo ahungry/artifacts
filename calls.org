@@ -154,9 +154,9 @@ post /action/move
 *** Withdraw an item
 post /action/bank/withdraw
 
-{"code":"life_amulet","quantity":1}
+{"code":"life_amulet","quantity":6}
 
 *** Deposit an item
 post /action/bank/deposit
 
-{"code":"ash_wood","quantity":80}
+{"code":"life_amulet","quantity":6}
