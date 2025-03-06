@@ -32,7 +32,7 @@
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
-    (not (char/full-health? name)) (char/do-rest! name)
+    (not (char/full-health? name)) (char/use-or-rest! name)
     ;; See if we should go fight some tougher things
     (time-to-move-on? name) (do-move-to-pref-area! name)
     ;; TODO: Make the default action a priority based thing? (fight vs craft vs events)

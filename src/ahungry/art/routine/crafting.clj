@@ -46,15 +46,12 @@
 (defn get-quantity-by-code [code xs]
   (-> (filter #(= code (:code %)) xs) first :quantity))
 
-(defn get-free-inventory-space [inv-max name]
-  (- inv-max (char/get-inventory-consumable-count name)))
-
 (defn get-iterations [name materials]
   "Given a list of materials, get the total number we can craft, capped
 by either inventory space or materials in bank."
   (let [base-quantity (apply + (map :material_quantity materials))
-        inv-max-raw (:inventory_max_items (char/get-char name))
-        inv-max (get-free-inventory-space inv-max-raw name)
+        inv-size (char/get-inventory-size name)
+        inv-max (char/get-free-inventory-space inv-size name)
         bank-contents (ebank/get-bank)
         minimal-bank-iterations
         (apply min
@@ -109,7 +106,7 @@ by either inventory space or materials in bank."
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
-    (not (char/full-health? name)) (char/do-rest! name)
+    (not (char/full-health? name)) (char/use-or-rest! name)
 
     (not (craft/has-craftable-items? name)) (log/info "Routine crafting, nothing to do!")
 

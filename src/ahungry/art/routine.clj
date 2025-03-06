@@ -75,6 +75,7 @@
 
             ;; Maybe we can craft for some skill ups...
             (and (is-allowed? :crafting)
+                 (not (char/too-much-food? name))
                  (crafting/has-craftable-items? name))
             (crafting/routine! name)
 

@@ -129,11 +129,25 @@
 left join items i on inv.code=i.code
 where inv.name=? and inv.code <> ''" name]))
 
-(defn get-inventory-consumable-count [name]
+(defn get-inventory-size [name]
+  (:inventory_max_items (get-char name)))
+
+(defn get-food [name]
   (->> (get-inventory name)
-       (filter #(= (:type %) "consumable"))
+       (filter #(= (:type %) "consumable"))))
+
+(defn get-inventory-consumable-count [name]
+  (->> (get-food name)
        (map :quantity)
        (apply +)))
+
+(defn get-free-inventory-space [inv-max name]
+  (- inv-max (get-inventory-consumable-count name)))
+
+(defn too-much-food? [name]
+  (let [food-count (get-inventory-consumable-count name)
+        inv-size (get-inventory-size name)]
+    (> (/ food-count inv-size) 0.3)))
 
 (defn get-equippable-upgrades [name]
   (j/query db ["select i.*,
@@ -333,6 +347,15 @@ order by type, quality desc" name]))
   (let [res (do-action! :bank-withdraw name {:code code :quantity quantity})]
     (bank/import-bank!)
     res))
+
+(defn do-use! [{:keys [code quantity]} name]
+  (do-action! :use name {:code code :quantity quantity}))
+
+(defn use-or-rest! [name]
+  (let [food (first (get-food name))]
+    (if food
+      (do-use! {:code (:code food) :quantity 1} name)
+      (do-rest! name))))
 
 (defn get-hunting-grounds [name]
   (let [char (get-char name)]

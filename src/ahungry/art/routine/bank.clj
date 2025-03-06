@@ -64,7 +64,7 @@
   (log/info "Bank routine - all items should be deposited soon" name)
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
-    (not (char/full-health? name)) (char/do-rest! name)
+    (not (char/full-health? name)) (char/use-or-rest! name)
 
     (not (has-bankable-items? name)) (log/info "Routine bank, nothing to do!")
 

@@ -83,7 +83,7 @@
 (defn routine! [name]
   (cond
     ;; Anytime we aren't full health, resting takes precedence.
-    (not (char/full-health? name)) (char/do-rest! name)
+    (not (char/full-health? name)) (char/use-or-rest! name)
 
     (has-pending-equippable? name) (equip-pending-item name)
 
