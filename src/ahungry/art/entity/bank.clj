@@ -10,9 +10,14 @@
 (defn get-bank []
   (j/query db ["select * from bank order by quantity desc"]))
 
+;; Basically anything in inventory except for consumables
+;; TODO: Probably add potions or w/e here later.
 (defn get-bankable-items [name]
-  (j/query db ["select * from inventory
-where name=? and code <> '' and quantity > 0 order by quantity desc" name]))
+  (j/query db ["select * from inventory inv
+left join items i on inv.code=i.code
+where inv.name=? and inv.code <> ''
+and i.type <> 'consumable'
+and inv.quantity > 0 order by inv.quantity desc" name]))
 
 (defn get-bank-types []
   (j/query db ["select distinct(type) from bank"] {:row-fn :type}))

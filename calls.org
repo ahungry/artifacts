@@ -57,7 +57,7 @@ get /monsters/chicken
 get /items
 
 **** Single item
-get /items/cultist_hat
+get /items/fried_eggs
 
 **** Single item
 get /items/wooden_staff

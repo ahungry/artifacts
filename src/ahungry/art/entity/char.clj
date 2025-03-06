@@ -125,9 +125,15 @@
    (import-char! (fetch-char name))))
 
 (defn get-inventory [name]
-  (j/query db ["select i.* from inventory inv
+  (j/query db ["select i.*, inv.quantity from inventory inv
 left join items i on inv.code=i.code
 where inv.name=? and inv.code <> ''" name]))
+
+(defn get-inventory-consumable-count [name]
+  (->> (get-inventory name)
+       (filter #(= (:type %) "consumable"))
+       (map :quantity)
+       (apply +)))
 
 (defn get-equippable-upgrades [name]
   (j/query db ["select i.*,

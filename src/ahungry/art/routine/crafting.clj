@@ -46,11 +46,15 @@
 (defn get-quantity-by-code [code xs]
   (-> (filter #(= code (:code %)) xs) first :quantity))
 
+(defn get-free-inventory-space [inv-max name]
+  (- inv-max (char/get-inventory-consumable-count name)))
+
 (defn get-iterations [name materials]
   "Given a list of materials, get the total number we can craft, capped
 by either inventory space or materials in bank."
   (let [base-quantity (apply + (map :material_quantity materials))
-        inv-max (:inventory_max_items (char/get-char name))
+        inv-max-raw (:inventory_max_items (char/get-char name))
+        inv-max (get-free-inventory-space inv-max-raw name)
         bank-contents (ebank/get-bank)
         minimal-bank-iterations
         (apply min
