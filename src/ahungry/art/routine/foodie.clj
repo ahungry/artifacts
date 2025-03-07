@@ -18,7 +18,7 @@
         inv-space (char/get-free-inventory-space (char/get-inventory-size name) name)]
     (if (not food)
       nil
-      (conj food {:quantity (min (:quantity food) inv-space)}))
+      (conj food {:quantity (min (:quantity food) (* inv-space 0.5))}))
     ))
 
 (defn has-food-in-bank? [name]
