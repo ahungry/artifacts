@@ -41,13 +41,15 @@
             :preferred-routine :mining
             :forbidden-routines [:fighting :woodcutting :crafting :recycling :equipping]}
            {:name "ahungry-nim"
-            :preferred-routine :fighting
-            :forbidden-routines [:mining :woodcutting :crafting :recycling :equipping]}
+            :preferred-routine :mining
+            :forbidden-routines [:eating :fighting :woodcutting :crafting :recycling :equipping]}
            {:name "ahungry-cut"
             :preferred-routine :woodcutting
-            :forbidden-routines [:fighting :mining :crafting :recycling :equipping]}
+            :forbidden-routines [:eating :fighting :mining :crafting :recycling :equipping]}
            {:name "ahungry-tuc"
             :preferred-routine :woodcutting
-            :forbidden-routines [:fighting :mining :crafting :recycling :equipping]}
+            :forbidden-routines [:eating :fighting :mining :crafting :recycling :equipping]}
            ]]
       (dorun (map init my-chars)))))
+
+            :forbidden-routines [:eating :fighting :mining :crafting :recycling :equipping]

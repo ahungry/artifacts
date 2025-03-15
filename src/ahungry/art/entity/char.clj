@@ -147,7 +147,8 @@ where inv.name=? and inv.code <> ''" name]))
 (defn too-much-food? [name]
   (let [food-count (get-inventory-consumable-count name)
         inv-size (get-inventory-size name)]
-    (> (/ food-count inv-size) 0.3)))
+    ;; (> (/ food-count inv-size) 0.3)
+    (> food-count 0)))
 
 (defn get-equippable-upgrades [name]
   (j/query db ["select i.*,

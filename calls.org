@@ -154,9 +154,17 @@ post /action/move
 *** Withdraw an item
 post /action/bank/withdraw
 
-{"code":"cooked_chicken","quantity":80}
+{"code":"wolf_ears","quantity":5}
 
 *** Deposit an item
 post /action/bank/deposit
 
 {"code":"life_amulet","quantity":6}
+
+*** Destroy an item
+post /action/delete
+
+{"code":"wolf_ears","quantity":5}
+
+*** Buy expansion
+post /action/bank/buy_expansion
