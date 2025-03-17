@@ -57,10 +57,10 @@ get /monsters/chicken
 get /items
 
 **** Single item
-get /items/fried_eggs
+get /items/spider_leg
 
 **** Single item
-get /items/wolf_ears
+get /items/steel_armor
 
 **** Single item
 get /items/copper_boots

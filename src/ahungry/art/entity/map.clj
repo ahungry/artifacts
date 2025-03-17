@@ -19,7 +19,7 @@
 (defn get-monster-maps []
   (get-maps-by-content-type "monster"))
 
-(defn get-hunting-grounds [{:keys [hp attack] :as char}]
+(defn get-hunting-grounds [{:keys [hp attack level] :as char}]
   (j/query
    db
    ["
@@ -27,9 +27,11 @@ select * from maps
 left join monsters m ON maps.content_code = m.code
 where content_type = 'monster'
 and (m.hp / ?) < (? / (m.attack_fire + m.attack_earth + m.attack_water + m.attack_air))
+and (level + 10) >= ?
+group by m.code
 order by level desc
 "
-    attack hp]))
+    attack hp level]))
 
 (defn get-woodcutting-grounds [{:keys [woodcutting_level] :as char}]
   (j/query

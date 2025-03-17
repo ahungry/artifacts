@@ -5,19 +5,22 @@
    [clojure.java.io]
    [clojure.string]
    [java-time.api :as jt]
+   [ahungry.art.util :as util]
    [ahungry.art.repo :refer [db sdk sdk-for]]
    [ahungry.art.entity.map :as emap]
    [ahungry.art.entity.char :as char]))
 
+;; TODO: Account for additional combat stats like resistances and % improvements
 (defn get-pref-area [name]
   (let [char (char/get-char name)]
     (-> (emap/get-hunting-grounds
          {:hp (:max_hp char)
+          :level (:level char)
           :attack (+ (:attack_air char)
                      (:attack_earth char)
                      (:attack_fire char)
                      (:attack_water char))})
-        first)))
+        util/hour-rand)))
 
 (defn do-move-to-pref-area! [name]
   (let [area (get-pref-area name)]

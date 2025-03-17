@@ -18,3 +18,13 @@
        .toString))
 
 ;; (get-datetime-from-error "Character in cooldown: 18.92 seconds left.")
+
+(defn get-hour []
+  (-> (jt/instant)
+      (.atZone java.time.ZoneOffset/UTC)
+      .getHour))
+
+(defn hour-rand [xs]
+  "Given a collection, choose an item based on the current hour.
+This allows for even distributions at an hourly rate of cycling."
+  (nth xs (mod (get-hour) (count xs))))

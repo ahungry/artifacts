@@ -47,3 +47,14 @@ where c.code='wolf_ears';
 .headings on
 
 .mode columns
+
+select distinct(i.code), i.quality, i.level FROM crafts c
+left join items i on c.code=i.code
+where type='body_armor'
+order by quality asc
+limit 30
+;
+
+select * from crafts c
+where c.code = 'multislimes_sword'
+;
