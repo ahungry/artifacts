@@ -27,7 +27,7 @@
 (defn is-allowed? [xs x]
   (not (.contains xs x)))
 
-(defn do-routine! [{:keys [name preferred-routine forbidden-routines]}]
+(defn do-routine! [{:keys [name preferred-routine forbidden-routines opts]}]
   (let [prefer-routine (atom preferred-routine)
         is-allowed? (partial is-allowed? forbidden-routines)]
 
@@ -87,7 +87,7 @@
 
             ;; Non-conditional options
             (and (is-allowed? :fighting)
-                 (= :fighting @prefer-routine)) (fight/routine! name)
+                 (= :fighting @prefer-routine)) (fight/routine! name opts)
 
             (and (is-allowed? :mining)
                  (= :mining @prefer-routine)) (mining/routine! name)

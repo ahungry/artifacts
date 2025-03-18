@@ -27,4 +27,6 @@
 (defn hour-rand [xs]
   "Given a collection, choose an item based on the current hour.
 This allows for even distributions at an hourly rate of cycling."
-  (nth xs (mod (get-hour) (count xs))))
+  (let [len (count xs)]
+    (when (> len 0)
+      (nth xs (mod (get-hour) len)))))

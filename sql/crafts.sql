@@ -35,6 +35,13 @@ select * from inventory;
 
 .mode line
 
+-- See what we can craft for gearcrafting at this level
+select c.code, skill, c.level, material_code, material_quantity FROM crafts c
+left join items i on c.code=i.code
+where skill='gearcrafting'
+and c.level = 10
+;
+
 select * FROM crafts c
 left join items i on c.code=i.code
 where type='amulet'

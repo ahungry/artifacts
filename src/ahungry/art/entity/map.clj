@@ -19,6 +19,17 @@
 (defn get-monster-maps []
   (get-maps-by-content-type "monster"))
 
+(defn get-hunting-grounds-by-mob-code [code]
+  (j/query
+   db
+   ["
+select * from maps
+left join monsters m ON maps.content_code = m.code
+where content_type = 'monster'
+and m.code = ? "
+
+    code]))
+
 (defn get-hunting-grounds [{:keys [hp attack level] :as char}]
   (j/query
    db

@@ -38,17 +38,21 @@
             :preferred-routine preferred-routine
             :forbidden-routines []}
            {:name "ahungry-min"
+            :opts {:preferred-mob "chicken"}
             :preferred-routine :mining
-            :forbidden-routines [:fighting :woodcutting :crafting :recycling :equipping]}
+            :forbidden-routines [:eating :fighting :woodcutting :crafting :recycling :equipping]}
            {:name "ahungry-nim"
+            :opts {:preferred-mob "chicken"}
             :preferred-routine :mining
             :forbidden-routines [:eating :fighting :woodcutting :crafting :recycling :equipping]}
            {:name "ahungry-cut"
-            :preferred-routine :woodcutting
-            :forbidden-routines [:eating :fighting :mining :crafting :recycling :equipping]}
+            :opts {:preferred-mob "chicken"}
+            :preferred-routine :fighting
+            :forbidden-routines [:eating :mining :crafting :recycling :equipping]}
            {:name "ahungry-tuc"
-            :preferred-routine :woodcutting
-            :forbidden-routines [:eating :fighting :mining :crafting :recycling :equipping]}
+            :opts {:preferred-mob "chicken"}
+            :preferred-routine :fighting
+            :forbidden-routines [:eating :mining :crafting :recycling :equipping]}
            ]]
       (dorun (map init my-chars)))))
 
